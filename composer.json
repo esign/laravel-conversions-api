@@ -53,5 +53,7 @@
                 "ConversionsApi": "Esign\\ConversionsApi\\Facades\\ConversionsApi"
             }
         }
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
