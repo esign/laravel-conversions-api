@@ -2,6 +2,7 @@
 
 namespace Esign\ConversionsApi;
 
+use Esign\ConversionsApi\Facades\ConversionsApi as ConversionsApiFacade;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
@@ -29,7 +30,7 @@ class ConversionsApiServiceProvider extends ServiceProvider
             return "<?php echo view('conversions-api::data-layer'); ?>";
         });
         Blade::directive('conversionsApiPageView', function () {
-            return "<?php app(\Esign\\ConversionsApi\\ConversionsApi::class)->executePageViewEvent(); ?>";
+            ConversionsApiFacade::executePageViewEvent();
         });
     }
 
