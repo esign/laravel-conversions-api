@@ -83,9 +83,14 @@ class ConversionsApi
 
     public function execute(): PromiseInterface
     {
-        return (new EventRequestAsync(config('conversions-api.pixel_id')))
-            ->setEvents([$this->event])
-            ->execute();
+        $eventRequest = (new EventRequestAsync(config('conversions-api.pixel_id')))
+            ->setEvents([$this->event]);
+
+        if ($testCode = config('conversions-api.test_code')) {
+            $eventRequest->setTestEventCode($testCode);
+        }
+
+        return $eventRequest->execute();
     }
 
     public function executePageViewEvent(): PromiseInterface
