@@ -28,6 +28,9 @@ class ConversionsApiServiceProvider extends ServiceProvider
         Blade::directive('conversionsApiDataLayer', function () {
             return "<?php echo view('conversions-api::data-layer'); ?>";
         });
+        Blade::directive('conversionsApiFacebookPixelScript', function () {
+            return "<?php echo view('conversions-api::facebook-pixel-script'); ?>";
+        });
         Blade::directive('conversionsApiPageView', function () {
             return "<?php app(\Esign\\ConversionsApi\\ConversionsApi::class)->executePageViewEvent(); ?>";
         });

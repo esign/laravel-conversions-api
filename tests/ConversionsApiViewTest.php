@@ -4,6 +4,7 @@ namespace Esign\ConversionsApi\Tests;
 
 use Esign\ConversionsApi\Facades\ConversionsApi;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Config;
 
 class ConversionsApiViewTest extends TestCase
 {
@@ -22,6 +23,31 @@ class ConversionsApiViewTest extends TestCase
         $this->assertStringContainsString(
             ConversionsApi::getEventId(),
             view('conversions-api::data-layer')->render()
+        );
+    }
+
+    /** @test */
+    public function it_can_render_the_facebook_pixel_script_view()
+    {
+        Config::set('conversions-api.pixel_id', 'your-pixel-id');
+
+        $this->assertStringContainsString(
+            ConversionsApi::getEventId(),
+            view('conversions-api::facebook-pixel-script')->render()
+        );
+
+        $this->assertStringContainsString(
+            'your-pixel-id',
+            view('conversions-api::facebook-pixel-script')->render()
+        );
+    }
+
+    /** @test */
+    public function it_can_render_the_facebook_pixel_script_directive()
+    {
+        $this->assertStringContainsString(
+            "<?php echo view('conversions-api::facebook-pixel-script'); ?>",
+            Blade::compileString('@conversionsApiFacebookPixelScript'),
         );
     }
 }
