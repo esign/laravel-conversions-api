@@ -27,6 +27,24 @@ class ConversionsApiViewTest extends TestCase
     }
 
     /** @test */
+    public function it_can_contain_a_default_data_layer_variable_name()
+    {
+        $this->assertStringContainsString(
+            'conversionsApiEventId',
+            view('conversions-api::data-layer')->render()
+        );
+    }
+
+    /** @test */
+    public function it_can_use_a_custom_data_layer_variable_name()
+    {
+        $this->assertStringContainsString(
+            'customDataLayerVariableName',
+            view('conversions-api::data-layer', ['dataLayerVariableName' => 'customDataLayerVariableName'])->render()
+        );
+    }
+
+    /** @test */
     public function it_can_render_the_facebook_pixel_script_view()
     {
         Config::set('conversions-api.pixel_id', 'your-pixel-id');
@@ -48,6 +66,15 @@ class ConversionsApiViewTest extends TestCase
         $this->assertStringContainsString(
             "<?php echo view('conversions-api::facebook-pixel-script'); ?>",
             Blade::compileString('@conversionsApiFacebookPixelScript'),
+        );
+    }
+
+    /** @test */
+    public function it_can_render_the_data_layer_directive()
+    {
+        $this->assertStringContainsString(
+            "<?php echo view('conversions-api::data-layer', ['dataLayerVariableName' => 'customDataLayerVariableName']); ?>",
+            Blade::compileString("@conversionsApiDataLayer('customDataLayerVariableName')"),
         );
     }
 }
