@@ -10,8 +10,10 @@ class ConversionsApiViewTest extends TestCase
     /** @test */
     public function it_can_render_the_conversions_api_page_view_directive()
     {
-        ConversionsApi::shouldReceive('executePageViewEvent')->once();
-        Blade::compileString('@conversionsApiPageView');
+        $this->assertSame(
+            '<?php app(\Esign\\ConversionsApi\\ConversionsApi::class)->executePageViewEvent(); ?>',
+            Blade::compileString('@conversionsApiPageView'),
+        );
     }
 
     /** @test */
