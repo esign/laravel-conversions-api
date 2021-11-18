@@ -19,9 +19,101 @@ Next up, you can publish the configuration file:
 php artisan vendor:publish --provider="Esign\ConversionsApi\ConversionsApiServiceProvider" --tag="config"
 ```
 
-## Usage
+The config file will be published as config/conversions-api.php with the following content:
+```php
+return [
+    /**
+     * The access token used by the Conversions API.
+     */
+    'access_token' => env('CONVERSIONS_API_ACCESS_TOKEN'),
 
-<!-- TODO -->
+    /**
+     * The pixel ID used by the Conversions API.
+     */
+    'pixel_id' => env('CONVERSIONS_API_PIXEL_ID'),
+
+    /**
+     * The Conversions API comes with a nice way to test your events.
+     * You may use this config variable to set your test code.
+     */
+    'test_code' => null,
+];
+```
+
+## Conversions API
+
+This package allows you to set the user data and events that will be sent to the Conversions API.
+```php
+use Esign\ConversionsApi\Facades\ConversionsApi;
+use FacebookAds\Object\ServerSide\UserData;
+use FacebookAds\Object\ServerSide\Event;
+
+ConversionsApi::setUserData(
+    (new UserData())->setFirstName('John')->setLastName('Doe')
+);
+ConversionsApi::setEvent(
+    (new Event())->setEventName('PageView')->setEventId('abc')
+);
+```
+
+To actually send the data you must call the `execute` method.
+```php
+use Esign\ConversionsApi\Facades\ConversionsApi;
+
+ConversionsApi::execute();
+```
+
+This package also comes with a nice helper to send `PageView` events.
+By including the `@conversionsApiPageView` directive on a page, an event with the minimum required data (ip address, user agent and request url) will be sent to the Conversions API:
+```php
+@conversionsApiPageView
+```
+
+###
+
+## Facebook Pixel
+To [deduplicate browser and server events](https://developers.facebook.com/docs/marketing-api/conversions-api/deduplicate-pixel-and-server-events/) this package will automatically generate a unique event ID for every request.
+This event ID should be passed along with your Facebook Pixel.
+This package comes with a few ways to do this:
+
+### Facebook Pixel
+In case you want to directly load the Facebook Pixel script you may use the `@conversionsApiFacebookPixelScript` directive or directly include it.
+```php
+@conversionsApiFacebookPixelScript
+@include('conversions-api::facebook-pixel-script')
+```
+
+### Google Tag Manager
+A convenient dataLayer helper is included in case you want to load the Facebook Pixel through Google Tag Manager.
+By default a variable name `conversionsApiEventId` will be used:
+```php
+@conversionsApiDataLayer
+@include('conversions-api::data-layer')
+```
+
+You may also pass a custom variable name:
+```php
+@conversionsApiDataLayer('yourDataLayerVariableName')
+@include('conversions-api::data-layer', ['dataLayerVariableName' => 'yourDataLayerVariableName'])
+```
+
+#### Configuring Google Tag Manager
+First off, you should add a new `Data Layer Variable` to your Google Tag Manager workspace.
+![1](docs/images/gtm-step-1.png)
+
+Next up you should use the variable name that was passed along to the data layer view.
+![2](docs/images/gtm-step-2.png)
+
+After saving the variable you should be able to use it in your Facebook Pixel script using the double bracket syntax: `{{ Name of your variable }}`.
+![3](docs/images/gtm-step-3.png)
+
+### Manually retrieving the event ID
+In case you want to use another strategy to deduplicate your events you can do so by manually retrieving the event ID:
+```php
+use Esign\ConversionsApi\Facades\ConversionsApi;
+
+ConversionsApi::getEventId();
+```
 
 ## Testing
 
