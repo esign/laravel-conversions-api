@@ -77,4 +77,13 @@ class ConversionsApiViewTest extends TestCase
             Blade::compileString("@conversionsApiDataLayer('customDataLayerVariableName')"),
         );
     }
+
+    /** @test */
+    public function it_can_render_the_data_layer_directive_when_no_arguments_are_provided()
+    {
+        $this->assertStringContainsString(
+            "<?php echo view('conversions-api::data-layer'); ?>",
+            Blade::compileString("@conversionsApiDataLayer"),
+        );
+    }
 }

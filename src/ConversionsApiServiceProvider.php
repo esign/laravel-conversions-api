@@ -26,7 +26,11 @@ class ConversionsApiServiceProvider extends ServiceProvider
     protected function registerBladeDirectives(): void
     {
         Blade::directive('conversionsApiDataLayer', function (?string $dataLayerVariableName = null) {
-            return "<?php echo view('conversions-api::data-layer', ['dataLayerVariableName' => {$dataLayerVariableName}]); ?>";
+            if (! $dataLayerVariableName) {
+                return "<?php echo view('conversions-api::data-layer'); ?>";
+            }
+
+            return "<?php echo view('conversions-api::data-layer', ['dataLayerVariableName' => $dataLayerVariableName]); ?>";
         });
         Blade::directive('conversionsApiFacebookPixelScript', function () {
             return "<?php echo view('conversions-api::facebook-pixel-script'); ?>";
