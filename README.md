@@ -42,26 +42,58 @@ return [
 
 ## Conversions API
 
-This package allows you to set the user data and events that will be sent to the Conversions API.
+### Events
+To add events to the conversions API you may use the `addEvent` or `setEvents` methods.
+Retrieving or clearing events may be done using the `getEvents` and `clearEvents` methods:
 ```php
 use Esign\ConversionsApi\Facades\ConversionsApi;
 use FacebookAds\Object\ServerSide\UserData;
 use FacebookAds\Object\ServerSide\Event;
 
-ConversionsApi::setUserData(
-    (new UserData())->setFirstName('John')->setLastName('Doe')
+ConversionsApi::addEvent(
+    (new Event())->setFirstName('John')->setLastName('Doe')
 );
-ConversionsApi::setEvent(
-    (new Event())->setEventName('PageView')->setEventId('abc')
-);
+
+ConversionsApi::setEvents([
+    (new Event())->setFirstName('John')->setLastName('Doe'),
+    (new Event())->setFirstName('Jane')->setLastName('Doe'),
+]);
+
+ConversionsApi::getEvents();
+ConversionsApi::clearEvents();
 ```
 
-To actually send the data you must call the `execute` method.
+Adding events won't cause them to be sent to the Conversions API.
+To actually send the events you must call the `sendEvents` method:
 ```php
 use Esign\ConversionsApi\Facades\ConversionsApi;
 
-ConversionsApi::execute();
+ConversionsApi::sendEvents();
 ```
+
+### User Data
+This package also comes with a way to define user data for the user of the current request.
+You may do so by calling the `setUserData` method, this is typically done in your `AppServiceProvider`:
+```php
+use Esign\ConversionsApi\Facades\ConversionsApi;
+use FacebookAds\Object\ServerSide\UserData;
+
+ConversionsApi::setUserData(
+    (new UserData())
+        ->setEmail(auth()->user()?->email)
+);
+```
+
+You may now use this user data to pass along with your events:
+```php
+use Esign\ConversionsApi\Facades\ConversionsApi;
+use FacebookAds\Object\ServerSide\UserData;
+
+ConversionsApi::addEvent(
+    (new Event())->setUserData(ConversionsApi::getUserData())
+);
+```
+
 
 This package also comes with a nice helper to send `PageView` events.
 By including the `@conversionsApiPageView` directive on a page, an event with the minimum required data (ip address, user agent and request url) will be sent to the Conversions API:
