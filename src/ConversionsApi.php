@@ -58,7 +58,7 @@ class ConversionsApi
         return $this->setEvents([]);
     }
 
-    public function execute(): PromiseInterface
+    public function sendEvents(): PromiseInterface
     {
         $eventRequest = (new EventRequestAsync(config('conversions-api.pixel_id')))
             ->setEvents($this->events);

@@ -10,7 +10,7 @@ class DataLayerPageView extends DataLayerVariable
     public function __construct(string $dataLayerVariableName = 'conversionsApiPageViewEventId')
     {
         $pageViewEvent = PageViewEvent::create();
-        ConversionsApi::addEvent($pageViewEvent)->execute();
+        ConversionsApi::addEvent($pageViewEvent)->sendEvents();
 
         parent::__construct(
             $dataLayerVariableName,

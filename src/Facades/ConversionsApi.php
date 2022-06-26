@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static self setEvents(iterable $events)
  * @method static \Illuminate\Support\Collection getEvents()
  * @method static self clearEvents()
- * @method static \GuzzleHttp\Promise\PromiseInterface execute()
+ * @method static \GuzzleHttp\Promise\PromiseInterface sendEvents()
  *
  * @see \Esign\ConversionsApi\ConversionsApi
  */

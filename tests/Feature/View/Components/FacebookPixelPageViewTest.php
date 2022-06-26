@@ -29,7 +29,7 @@ class FacebookPixelPageViewTest extends TestCase
         $this->mock(ConversionsApi::class, function (MockInterface $mock) {
             $mock->shouldReceive('getUserData')->once();
             $mock->shouldReceive('addEvent')->once()->andReturnSelf();
-            $mock->shouldReceive('execute')->once();
+            $mock->shouldReceive('sendEvents')->once();
         });
 
         $this->component(FacebookPixelPageView::class);
