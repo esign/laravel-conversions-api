@@ -5,24 +5,9 @@ namespace Esign\ConversionsApi\Tests;
 use Esign\ConversionsApi\Facades\ConversionsApi;
 use FacebookAds\Object\ServerSide\Event;
 use FacebookAds\Object\ServerSide\UserData;
-use Illuminate\Support\Str;
 
 class ConversionsApiTest extends TestCase
 {
-    /** @test */
-    public function it_can_set_a_uuid_as_default_event_id()
-    {
-        $this->assertTrue(Str::isUuid(ConversionsApi::getEventId()));
-    }
-
-    /** @test */
-    public function it_can_set_an_event_id()
-    {
-        ConversionsApi::setEventId('abc');
-
-        $this->assertEquals('abc', ConversionsApi::getEventId());
-    }
-
     /** @test */
     public function it_can_set_user_data_by_default()
     {
@@ -45,31 +30,38 @@ class ConversionsApiTest extends TestCase
     }
 
     /** @test */
-    public function it_wont_have_an_event_by_default()
+    public function it_can_add_an_event()
     {
-        $this->assertNull(ConversionsApi::getEvent());
-    }
-
-    /** @test */
-    public function it_can_set_an_event()
-    {
-        ConversionsApi::setEvent(
+        ConversionsApi::addEvent(
             (new Event())->setEventName('PageView')->setEventId('abc')
         );
 
-        $this->assertEquals('PageView', ConversionsApi::getEvent()->getEventName());
-        $this->assertEquals('abc', ConversionsApi::getEvent()->getEventId());
+        $this->assertCount(1, ConversionsApi::getEvents());
+        $this->assertEquals('PageView', ConversionsApi::getEvents()->first()->getEventName());
+        $this->assertEquals('abc', ConversionsApi::getEvents()->first()->getEventId());
     }
 
     /** @test */
-    public function it_can_set_an_event_by_name()
+    public function it_can_set_an_array_of_events()
     {
-        request()->headers->set('HOST', 'www.esign.eu');
-        request()->server->set('HTTPS', true);
-        ConversionsApi::setEventByName('Contact');
+        ConversionsApi::setEvents([
+            (new Event())->setEventName('PageView')->setEventId('abc'),
+        ]);
 
-        $this->assertEquals('Contact', ConversionsApi::getEvent()->getEventName());
-        $this->assertEquals('website', ConversionsApi::getEvent()->getActionSource());
-        $this->assertEquals('https://www.esign.eu', ConversionsApi::getEvent()->getEventSourceUrl());
+        $this->assertCount(1, ConversionsApi::getEvents());
+        $this->assertEquals('PageView', ConversionsApi::getEvents()->first()->getEventName());
+        $this->assertEquals('abc', ConversionsApi::getEvents()->first()->getEventId());
+    }
+
+    /** @test */
+    public function it_can_clear_events()
+    {
+        ConversionsApi::setEvents([
+            (new Event())->setEventName('PageView')->setEventId('abc'),
+        ]);
+
+        ConversionsApi::clearEvents();
+
+        $this->assertCount(0, ConversionsApi::getEvents());
     }
 }

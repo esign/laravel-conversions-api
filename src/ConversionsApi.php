@@ -2,34 +2,24 @@
 
 namespace Esign\ConversionsApi;
 
+use Esign\ConversionsApi\Objects\DefaultUserData;
 use FacebookAds\Api;
 use FacebookAds\Object\ServerSide\Event;
 use FacebookAds\Object\ServerSide\EventRequestAsync;
 use FacebookAds\Object\ServerSide\UserData;
 use GuzzleHttp\Promise\PromiseInterface;
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
 
 class ConversionsApi
 {
-    protected Request $request;
+    protected Collection $events;
     protected UserData $userData;
-    protected ?Event $event = null;
-    protected string $eventId;
 
     public function __construct()
     {
-        $this->request = request();
-        $this->userData = $this->getDefaultUserData();
-        $this->eventId = (string) Str::uuid();
+        $this->events = new Collection();
+        $this->setUserData(DefaultUserData::create());
         Api::init(null, null, config('conversions-api.access_token'), false);
-    }
-
-    protected function getDefaultUserData(): UserData
-    {
-        return (new UserData())
-            ->setClientIpAddress($this->request->ip())
-            ->setClientUserAgent($this->request->userAgent());
     }
 
     public function setUserData(UserData $userData): self
@@ -44,57 +34,41 @@ class ConversionsApi
         return $this->userData;
     }
 
-    public function setEvent(Event $event): self
+    public function addEvent(Event $event): self
     {
-        $this->event = $event;
+        $this->events->push($event);
 
         return $this;
     }
 
-    public function getEvent(): ?Event
+    public function setEvents(iterable $events): self
     {
-        return $this->event;
-    }
-
-    public function getEventId(): string
-    {
-        return $this->eventId;
-    }
-
-    public function setEventId(string $eventId): self
-    {
-        $this->eventId = $eventId;
+        $this->events = new Collection($events);
 
         return $this;
     }
 
-    public function setEventByName(string $eventName): self
+    public function getEvents(): Collection
     {
-        $event = (new Event())
-            ->setActionSource('website')
-            ->setEventName($eventName)
-            ->setEventId($this->getEventId())
-            ->setEventTime(time())
-            ->setEventSourceUrl($this->request->url())
-            ->setUserData($this->userData);
+        return $this->events;
+    }
 
-        return $this->setEvent($event);
+    public function clearEvents(): self
+    {
+        return $this->setEvents([]);
     }
 
     public function execute(): PromiseInterface
     {
         $eventRequest = (new EventRequestAsync(config('conversions-api.pixel_id')))
-            ->setEvents([$this->event]);
+            ->setEvents($this->events);
 
         if ($testCode = config('conversions-api.test_code')) {
             $eventRequest->setTestEventCode($testCode);
         }
 
-        return $eventRequest->execute();
-    }
+        $this->clearEvents();
 
-    public function executePageViewEvent(): PromiseInterface
-    {
-        return $this->setEventByName('PageView')->execute();
+        return $eventRequest->execute();
     }
 }
