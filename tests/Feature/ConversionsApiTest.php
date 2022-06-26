@@ -1,8 +1,9 @@
 <?php
 
-namespace Esign\ConversionsApi\Tests;
+namespace Esign\ConversionsApi\Tests\Feature;
 
 use Esign\ConversionsApi\Facades\ConversionsApi;
+use Esign\ConversionsApi\Tests\TestCase;
 use FacebookAds\Object\ServerSide\Event;
 use FacebookAds\Object\ServerSide\UserData;
 
