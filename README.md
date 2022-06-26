@@ -51,12 +51,12 @@ use FacebookAds\Object\ServerSide\UserData;
 use FacebookAds\Object\ServerSide\Event;
 
 ConversionsApi::addEvent(
-    (new Event())->setFirstName('John')->setLastName('Doe')
+    (new Event())->setEventName('PageView')->setEventId('abc')
 );
 
 ConversionsApi::setEvents([
-    (new Event())->setFirstName('John')->setLastName('Doe'),
-    (new Event())->setFirstName('Jane')->setLastName('Doe'),
+    (new Event())->setEventName('PageView')->setEventId('abc'),
+    (new Event())->setEventName('Purchase')->setEventId('xyz'),
 ]);
 
 ConversionsApi::getEvents();
