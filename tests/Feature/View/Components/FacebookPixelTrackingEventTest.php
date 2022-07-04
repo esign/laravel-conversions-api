@@ -14,7 +14,7 @@ class FacebookPixelTrackingEventTest extends TestCase
     public function it_can_render_the_view()
     {
         $component = $this->component(FacebookPixelTrackingEvent::class, [
-            'command' => 'track',
+            'eventType' => 'track',
             'eventName' => 'Purchase',
         ]);
 
@@ -23,13 +23,13 @@ class FacebookPixelTrackingEventTest extends TestCase
     }
 
     /** @test */
-    public function it_can_encode_data_and_parameters_as_objects_when_they_are_empty_arrays()
+    public function it_can_encode_custom_data_and_event_data_as_objects_when_they_are_empty_arrays()
     {
         $component = $this->component(FacebookPixelTrackingEvent::class, [
-            'command' => 'track',
+            'eventType' => 'track',
             'eventName' => 'Purchase',
-            'data' => [],
-            'parameters' => [],
+            'customData' => [],
+            'eventData' => [],
         ]);
 
         $component->assertSee(
@@ -39,17 +39,17 @@ class FacebookPixelTrackingEventTest extends TestCase
     }
 
     /** @test */
-    public function it_can_json_encode_data_and_parameters()
+    public function it_can_json_encode_custom_data_and_event_data()
     {
         $component = $this->component(FacebookPixelTrackingEvent::class, [
-            'command' => 'track',
+            'eventType' => 'track',
             'eventName' => 'Purchase',
-            'data' => ['price' => 120],
-            'parameters' => ['eventID' => '123'],
+            'customData' => ['price' => 120, 'currency' => 'GBP', 'contents' => [['id' => '10', 'quantity' => 2]]],
+            'eventData' => ['eventID' => '123'],
         ]);
 
         $component->assertSee(
-            "fbq('track', 'Purchase', {\"price\":120}, {\"eventID\":\"123\"});",
+            "fbq('track', 'Purchase', {\"price\":120,\"currency\":\"GBP\",\"contents\":[{\"id\":\"10\",\"quantity\":2}]}, {\"eventID\":\"123\"});",
             false
         );
     }

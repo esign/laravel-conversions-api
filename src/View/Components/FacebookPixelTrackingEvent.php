@@ -6,30 +6,30 @@ use Illuminate\View\Component;
 
 class FacebookPixelTrackingEvent extends Component
 {
-    protected string $command;
+    protected string $eventType;
     protected string $eventName;
-    protected array $data;
-    protected array $parameters;
+    protected array $customData;
+    protected array $eventData;
 
     public function __construct(
-        string $command = 'track',
+        string $eventType,
         string $eventName,
-        array $data = [],
-        array $parameters = [],
+        array $customData = [],
+        array $eventData = [],
     ) {
-        $this->command = $command;
+        $this->eventType = $eventType;
         $this->eventName = $eventName;
-        $this->data = $data;
-        $this->parameters = $parameters;
+        $this->customData = $customData;
+        $this->eventData = $eventData;
     }
 
     public function render()
     {
         return view('conversions-api::components.facebook-pixel-tracking-event', [
-            'command' => $this->command,
+            'eventType' => $this->eventType,
             'eventName' => $this->eventName,
-            'data' => $this->data,
-            'parameters' => $this->parameters,
+            'customData' => $this->customData,
+            'eventData' => $this->eventData,
         ]);
     }
 }

@@ -6,6 +6,7 @@ use Esign\ConversionsApi\Facades\ConversionsApi;
 use Esign\ConversionsApi\View\Components\DataLayerPageView;
 use Esign\ConversionsApi\View\Components\DataLayerVariable;
 use Esign\ConversionsApi\View\Components\FacebookPixelPageView;
+use Esign\ConversionsApi\View\Components\FacebookPixelScript;
 use Esign\ConversionsApi\View\Components\FacebookPixelTrackingEvent;
 use Illuminate\Support\ServiceProvider;
 
@@ -15,10 +16,11 @@ class ConversionsApiServiceProvider extends ServiceProvider
     {
         $this->loadViewsFrom($this->viewPath(), 'conversions-api');
         $this->loadViewComponentsAs('conversions-api', [
-            DataLayerPageView::class,
-            DataLayerVariable::class,
-            FacebookPixelPageView::class,
-            FacebookPixelTrackingEvent::class,
+            'data-layer-page-view' => DataLayerPageView::class,
+            'data-layer-variable' => DataLayerVariable::class,
+            'facebook-pixel-script' => FacebookPixelScript::class,
+            'facebook-pixel-page-view' => FacebookPixelPageView::class,
+            'facebook-pixel-tracking-event' => FacebookPixelTrackingEvent::class,
         ]);
 
         if ($this->app->runningInConsole()) {
