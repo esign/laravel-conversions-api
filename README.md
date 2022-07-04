@@ -63,7 +63,7 @@ ConversionsApi::getEvents();
 ConversionsApi::clearEvents();
 ```
 
-Adding events won't cause them to be sent to the Conversions API.
+Adding events won't cause them to be sent to the Conversions API.    
 To actually send the events you must call the `sendEvents` method:
 ```php
 use Esign\ConversionsApi\Facades\ConversionsApi;
@@ -72,7 +72,7 @@ ConversionsApi::sendEvents();
 ```
 
 ### User Data
-This package also comes with a way to define user data for the user of the current request.
+This package also comes with a way to define default user data for the user of the current request.
 You may do so by calling the `setUserData` method, this is typically done in your `AppServiceProvider`:
 ```php
 use Esign\ConversionsApi\Facades\ConversionsApi;
@@ -110,7 +110,7 @@ Before attempting to send Facebook Pixel events you should load the pixel script
 <x-conversions-api-facebook-pixel-script />
 ```
 
-This will rendering the following script:
+This will render the following script:
 ```html
 <script>
     !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -125,7 +125,7 @@ This will rendering the following script:
 
 You may now track an event using the provided view component:
 ```blade
-<x-conversions-api::facebook-pixel-tracking-event
+<x-conversions-api-facebook-pixel-tracking-event
     :eventType="'track'"
     :eventName="'Purchase'"
     :customData="['value' => 12, 'currency' => 'USD']"
