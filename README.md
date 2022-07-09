@@ -94,11 +94,6 @@ ConversionsApi::addEvent(
 );
 ```
 
-### PageViews
-This package ships with some nice helpers to track `PageView` events out of the box.
-By including the `<x-conversions-api-facebook-pixel-page-view />` view component.
-In case you're sending out events using GTM you may use the `<x-conversions-api-data-layer-page-view />` view component.
-
 ## Event deduplication
 This package comes with a few ways to assist you in [deduplicating browser and server events](https://developers.facebook.com/docs/marketing-api/conversions-api/deduplicate-pixel-and-server-events/). This can either be done using the Facebook Pixel directly or through Google Tag Manager's data layer.
 
@@ -221,6 +216,18 @@ Next up you should use the variable name that was passed along to the data layer
 
 After saving the variable you should be able to use it in your Facebook Pixel script using the double bracket syntax: `{{ Name of your variable }}`.
 ![3](docs/images/gtm-step-3.png)
+
+## PageView Events
+This package ships with some helpers to track `PageView` events out of the box.
+These helpers will automatically send both Conversions API & Facebook Pixel events and provide event deduplication.
+In case you're using the Facebook Pixel directly:
+```blade
+<x-conversions-api-facebook-pixel-page-view />
+```
+Or by using Google Tag Manager. The data-layer variable to deduplicate events is called `conversionsApiPageViewEventId`.
+```blade
+<x-conversions-api-data-layer-page-view />
+```
 
 ## Testing
 
