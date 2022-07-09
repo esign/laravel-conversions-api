@@ -2,24 +2,20 @@
 
 namespace Esign\ConversionsApi\View\Components;
 
+use Esign\ConversionsApi\Contracts\MapsToDataLayer;
 use Illuminate\View\Component;
 
 class DataLayerVariable extends Component
 {
-    protected string $name;
-    protected mixed $value;
-
-    public function __construct(string $name, mixed $value)
-    {
-        $this->name = $name;
-        $this->value = $value;
+    public function __construct(
+        protected MapsToDataLayer $event
+    ) {
     }
 
     public function render()
     {
         return view('conversions-api::components.data-layer-variable', [
-            'name' => $this->name,
-            'value' => $this->value,
+            'arguments' => $this->event->getDataLayerArguments(),
         ]);
     }
 }

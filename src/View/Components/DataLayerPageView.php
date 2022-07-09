@@ -7,14 +7,11 @@ use Esign\ConversionsApi\Objects\PageViewEvent;
 
 class DataLayerPageView extends DataLayerVariable
 {
-    public function __construct(string $dataLayerVariableName = 'conversionsApiPageViewEventId')
+    public function __construct()
     {
         $pageViewEvent = PageViewEvent::create();
         ConversionsApi::addEvent($pageViewEvent)->sendEvents();
 
-        parent::__construct(
-            $dataLayerVariableName,
-            $pageViewEvent->getEventId()
-        );
+        parent::__construct($pageViewEvent);
     }
 }

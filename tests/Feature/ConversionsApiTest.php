@@ -2,6 +2,7 @@
 
 namespace Esign\ConversionsApi\Tests\Feature;
 
+use Esign\ConversionsApi\Collections\EventCollection;
 use Esign\ConversionsApi\Facades\ConversionsApi;
 use Esign\ConversionsApi\Tests\TestCase;
 use FacebookAds\Object\ServerSide\Event;
@@ -64,5 +65,18 @@ class ConversionsApiTest extends TestCase
         ConversionsApi::clearEvents();
 
         $this->assertCount(0, ConversionsApi::getEvents());
+    }
+
+    /** @test */
+    public function it_can_get_events()
+    {
+        ConversionsApi::setEvents([
+            (new Event())->setEventName('PageView')->setEventId('abc'),
+        ]);
+
+        $events = ConversionsApi::getEvents();
+
+        $this->assertInstanceOf(EventCollection::class, $events);
+        $this->assertCount(1, $events);
     }
 }

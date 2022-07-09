@@ -99,18 +99,16 @@ This package ships with some nice helpers to track `PageView` events out of the 
 By including the `<x-conversions-api-facebook-pixel-page-view />` view component.
 In case you're sending out events using GTM you may use the `<x-conversions-api-data-layer-page-view />` view component.
 
-### Event deduplication
-To [deduplicate browser and server events](https://developers.facebook.com/docs/marketing-api/conversions-api/deduplicate-pixel-and-server-events/) you may use Laravel's `Str::uuid()` helper to generate a unique event ID.
-This event ID should be passed along with your Facebook Pixel.
-This package comes with a few ways to do this:
+## Event deduplication
+This package comes with a few ways to assist you in [deduplicating browser and server events](https://developers.facebook.com/docs/marketing-api/conversions-api/deduplicate-pixel-and-server-events/). This can either be done using the Facebook Pixel directly or through Google Tag Manager's data layer.
 
 ### Facebook Pixel
-Before attempting to send Facebook Pixel events you should load the pixel script:
+Before attempting to send events through Facebook Pixel make sure to load the pixel script:
 ```blade
 <x-conversions-api-facebook-pixel-script />
 ```
 
-This will render the following script:
+This will render the following html:
 ```html
 <script>
     !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -119,25 +117,85 @@ This will render the following script:
     t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
     document,'script','https://connect.facebook.net/en_US/fbevents.js');
 
-    fbq('init', 'your-configured-pixel-id');
+    fbq('init', 'your-configured-pixel-id', {});
 </script>
 ```
 
-You may now track an event using the provided view component:
+This package will attempt to provide as much advanced matching data as possible by using user data from the `ConversionsApi`.    
+For example when an email address is set, it will automatically be provided to the init method:
+```php
+ConversionsApi::setUserData(
+    (new UserData())->setEmail('john@example.com')
+);
+```
 ```blade
-<x-conversions-api-facebook-pixel-tracking-event
-    :eventType="'track'"
-    :eventName="'Purchase'"
-    :customData="['value' => 12, 'currency' => 'USD']"
-    :eventData="['eventID' => 'ccf928e1-56fd-4376-bee3-dda0d7dbe136']"
-/>
+fbq('init', 'your-configured-pixel-id', {"em": "john@example.com"});
+```
+
+Now that your Pixel is correctly initialized, it's time to send some events.    
+Sadly the parameters between the Conversions API and Facebook Pixel are not identical, so they must be mapped to the [correct format](https://developers.facebook.com/docs/meta-pixel/reference).
+An easy way of doing this is by extending the `FacebookAds\Object\ServerSide\Event` class and implementing the `Esign\ConversionsApi\Contracts\MapsToFacebookPixel` interface on it:
+```php
+use Esign\ConversionsApi\Contracts\MapsToFacebookPixel;
+use FacebookAds\Object\ServerSide\Event;
+
+class PurchaseEvent extends Event implements MapsToFacebookPixel
+{
+    public function getFacebookPixelEventType(): string
+    {
+        return 'track';
+    }
+
+    public function getFacebookPixelEventName(): string
+    {
+        return 'Purchase';
+    }
+
+    public function getFacebookPixelCustomData(): array
+    {
+        $customData = $this->getCustomData();
+
+        return array_filter([
+            'currency' => $customData?->getCurrency(),
+            'value' => $customData?->getValue(),
+        ]);
+    }
+
+    public function getFacebookPixelEventData(): array
+    {
+        return array_filter(['eventID' => $this->getEventId()]);
+    }
+}
+```
+
+You may now pass any class that implements the `MapsToFacebookPixel` interface to the view component responsible for tracking Facebook Pixel events:
+```php
+use FacebookAds\Object\ServerSide\CustomData;
+use Illuminate\Support\Str;
+
+$customData = (new CustomData())->setCurrency('EUR')->setValue(10);
+$event = (new PurchaseEvent())->setCustomData($customData)->setEventId((string) Str::uuid());
+```
+
+```blade
+<x-conversions-api-facebook-pixel-tracking-event :event="$event" />
 ```
 
 This will render the following script tag:
 ```html
 <script>
-    fbq('track', 'Purchase', {"value": 12, "currency": "USD"}, {"eventID": "ccf928e1-56fd-4376-bee3-dda0d7dbe136"});
+    fbq('track', 'Purchase', {"currency": "EUR", "value": 10}, {"eventID": "ccf928e1-56fd-4376-bee3-dda0d7dbe136"});
 </script>
+```
+
+In case you want more control over what's being rendered, you may always use the anonymous component:
+```blade
+<x-conversions-api::facebook-pixel-tracking-event
+    eventType="track"
+    eventName="Purchase"
+    :customData="[]"
+    :eventData="[]"
+/>
 ```
 
 ### Google Tag Manager

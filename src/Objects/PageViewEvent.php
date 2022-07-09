@@ -2,12 +2,14 @@
 
 namespace Esign\ConversionsApi\Objects;
 
+use Esign\ConversionsApi\Contracts\MapsToDataLayer;
+use Esign\ConversionsApi\Contracts\MapsToFacebookPixel;
 use Esign\ConversionsApi\Facades\ConversionsApi;
 use FacebookAds\Object\ServerSide\ActionSource;
 use FacebookAds\Object\ServerSide\Event;
 use Illuminate\Support\Str;
 
-class PageViewEvent extends Event
+class PageViewEvent extends Event implements MapsToFacebookPixel, MapsToDataLayer
 {
     public static function create(): self
     {
@@ -18,5 +20,30 @@ class PageViewEvent extends Event
             ->setEventTime(time())
             ->setEventSourceUrl(request()->url())
             ->setUserData(ConversionsApi::getUserData());
+    }
+
+    public function getFacebookPixelEventType(): string
+    {
+        return 'track';
+    }
+
+    public function getFacebookPixelEventName(): string
+    {
+        return 'PageView';
+    }
+
+    public function getFacebookPixelCustomData(): array
+    {
+        return [];
+    }
+
+    public function getFacebookPixelEventData(): array
+    {
+        return ['eventID' => $this->getEventId()];
+    }
+
+    public function getDataLayerArguments(): array
+    {
+        return ['conversionsApiPageViewEventId' => $this->getEventId()];
     }
 }

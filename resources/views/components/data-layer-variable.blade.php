@@ -1,4 +1,4 @@
 <script>
     window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({'{{ $name }}': '{{ $value }}'});
+    window.dataLayer.push(@json((object) $arguments));
 </script>

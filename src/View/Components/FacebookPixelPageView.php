@@ -12,11 +12,6 @@ class FacebookPixelPageView extends FacebookPixelTrackingEvent
         $pageViewEvent = PageViewEvent::create();
         ConversionsApi::addEvent($pageViewEvent)->sendEvents();
 
-        parent::__construct(
-            eventType: 'track',
-            eventName: 'PageView',
-            customData: [],
-            eventData: ['eventID' => $pageViewEvent->getEventId()]
-        );
+        parent::__construct($pageViewEvent);
     }
 }

@@ -2,22 +2,22 @@
 
 namespace Esign\ConversionsApi;
 
+use Esign\ConversionsApi\Collections\EventCollection;
 use Esign\ConversionsApi\Objects\DefaultUserData;
 use FacebookAds\Api;
 use FacebookAds\Object\ServerSide\Event;
 use FacebookAds\Object\ServerSide\EventRequestAsync;
 use FacebookAds\Object\ServerSide\UserData;
 use GuzzleHttp\Promise\PromiseInterface;
-use Illuminate\Support\Collection;
 
 class ConversionsApi
 {
-    protected Collection $events;
+    protected EventCollection $events;
     protected UserData $userData;
 
     public function __construct()
     {
-        $this->events = new Collection();
+        $this->events = new EventCollection();
         $this->setUserData(DefaultUserData::create());
         Api::init(null, null, config('conversions-api.access_token'), false);
     }
@@ -43,12 +43,12 @@ class ConversionsApi
 
     public function setEvents(iterable $events): self
     {
-        $this->events = new Collection($events);
+        $this->events = new EventCollection($events);
 
         return $this;
     }
 
-    public function getEvents(): Collection
+    public function getEvents(): EventCollection
     {
         return $this->events;
     }
