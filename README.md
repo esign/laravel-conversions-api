@@ -33,10 +33,17 @@ return [
     'pixel_id' => env('CONVERSIONS_API_PIXEL_ID'),
 
     /**
+     * The Google Tag Manager container ID used in case you're deduplicating
+     * events through Google Tag Manager instead of Facebook Pixel directly.
+     * Should look something like "GTM-XXXXXX".
+     */
+    'gtm_id' => env('GOOGLE_TAG_MANAGER_ID'),
+
+    /**
      * The Conversions API comes with a nice way to test your events.
      * You may use this config variable to set your test code.
      */
-    'test_code' => null,
+    'test_code' => env('CONVERSIONS_API_TEST_CODE'),
 ];
 ```
 
@@ -215,28 +222,113 @@ In case you want more control over what's being rendered, you may always use the
 ```
 
 ### Google Tag Manager
-A convenient dataLayer helper is included in case you want to load the Facebook Pixel through Google Tag Manager.
-By default a variable name `conversionsApiEventId` will be used:
-```php
-@conversionsApiDataLayer
-@include('conversions-api::data-layer')
+Before attempting to deduplicate events through GTM make sure to configure your GTM container id and include the necessary scripts:
+
+```env
+GOOGLE_TAG_MANAGER_ID=GTM-XXXXXX
 ```
 
-You may also pass a custom variable name:
-```php
-@conversionsApiDataLayer('yourDataLayerVariableName')
-@include('conversions-api::data-layer', ['dataLayerVariableName' => 'yourDataLayerVariableName'])
+```blade
+<html>
+  <head>
+    <x-conversions-api-google-tag-manager-head />
+    {{-- ... --}}
+  </head>
+  <body>
+    <x-conversions-api-google-tag-manager-body />
+    {{-- ... --}}
+  </body>
+</html>
 ```
 
-#### Configuring Google Tag Manager
-First off, you should add a new `Data Layer Variable` to your Google Tag Manager workspace.
-![1](docs/images/gtm-step-1.png)
+This package comes with a view component that will map all user data from the `ConversionsApi` to dataLayer variables:
+```blade
+<x-conversions-api-data-layer-user-variable />
+```
+For example when an email address is set, it will be automatically mapped to a dataLayer variable.
+Check the [source](src/View/Components/DataLayerUserDataVariable.php) of the view component to see a list of all possible variables.
+```php
+ConversionsApi::setUserData(
+    (new UserData())->setEmail('john@example.com')
+);
+```
+```js
+window.dataLayer.push({"conversionsApiEmail": "john@example.com"});
+```
 
-Next up you should use the variable name that was passed along to the data layer view.
-![2](docs/images/gtm-step-2.png)
+Now that your Pixel through GTM is correctly initialized, it's time to send some events.
+Sadly the parameters between the Conversions API and Facebook Pixel are not identical, so they must be mapped to the [correct format](https://developers.facebook.com/docs/meta-pixel/reference).
+An easy way of doing this is by extending the `FacebookAds\Object\ServerSide\Event` class and implementing the `Esign\ConversionsApi\Contracts\MapsToDataLayer` interface on it:
+```php
+use Esign\ConversionsApi\Contracts\MapsToDataLayer;
+use Esign\ConversionsApi\Facades\ConversionsApi;
+use FacebookAds\Object\ServerSide\ActionSource;
+use FacebookAds\Object\ServerSide\Event;
 
-After saving the variable you should be able to use it in your Facebook Pixel script using the double bracket syntax: `{{ Name of your variable }}`.
-![3](docs/images/gtm-step-3.png)
+class PurchaseEvent extends Event implements MapsToDataLayer
+{
+    public static function create(): static
+    {
+        return (new static())
+            ->setActionSource(ActionSource::WEBSITE)
+            ->setEventName('Purchase')
+            ->setEventTime(time())
+            ->setEventSourceUrl(request()->fullUrl())
+            ->setEventId((string) Str::uuid())
+            ->setUserData(ConversionsApi::getUserData());
+    }
+
+    public function getDataLayerArguments(): array
+    {
+        $customData = $this->getCustomData();
+
+        return [
+            'event' => 'conversionsApiPurchase',
+            'conversionsApiPurchaseEventId' => $this->getEventId(),
+            'conversionsApiPurchaseCurrency' => $customData?->getCurrency(),
+            'conversionsApiPurchaseValue' => $customData?->getValue(),
+        ];
+    }
+}
+```
+
+You may now pass any class that implements the `MapsToDataLayer` interface to the view component responsible for tracking Facebook Pixel events:
+```php
+use FacebookAds\Object\ServerSide\CustomData;
+use Illuminate\Support\Str;
+
+$event = PurchaseEvent::create()->setCustomData(
+    (new CustomData())->setCurrency('EUR')->setValue(10)
+);
+```
+
+```blade
+<x-conversions-api-data-layer-variable :event="$event" />
+```
+
+This will render the following script tag:
+```html
+<script>
+    window.dataLayer.push({
+        "event": "conversionsApiPurchase",
+        "conversionsApiPurchaseEventId": "e2481afc-5af4-4483-bc4b-33f08e195e3a",
+        "conversionsApiPurchaseCurrency": "EUR",
+        "conversionsApiPurchaseValue": 120
+    });
+</script>
+```
+
+To retrieve a list of all events that implement the `MapsToDataLayer` interface you may call the `filterDataLayerEvents` method:
+```blade
+@foreach(ConversionsApi::getEvents()->filterDataLayerEvents() as $event)
+    <x-conversions-api-data-layer-variable :event="$event" />
+@endforeach
+```
+
+In case you want more control over what's being rendered, you may always use the anonymous component:
+```blade
+<x-conversions-api::data-layer-variable :arguments="[]" />
+```
 
 ## PageView Events
 This package ships with some helpers to track `PageView` events out of the box.
