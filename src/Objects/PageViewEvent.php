@@ -29,7 +29,7 @@ class PageViewEvent extends Event implements MapsToFacebookPixel, MapsToDataLaye
 
     public function getFacebookPixelEventName(): string
     {
-        return 'PageView';
+        return $this->getEventName();
     }
 
     public function getFacebookPixelCustomData(): array

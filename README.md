@@ -63,7 +63,7 @@ ConversionsApi::getEvents();
 ConversionsApi::clearEvents();
 ```
 
-Adding events won't cause them to be sent to the Conversions API.    
+Adding events won't cause them to be sent to the Conversions API.
 To actually send the events you must call the `sendEvents` method:
 ```php
 use Esign\ConversionsApi\Facades\ConversionsApi;
@@ -116,14 +116,14 @@ This will render the following html:
 </script>
 ```
 
-This package will attempt to provide as much advanced matching data as possible by using user data from the `ConversionsApi`.    
+This package will attempt to provide as much advanced matching data as possible by using user data from the `ConversionsApi`.
 For example when an email address is set, it will automatically be provided to the init method:
 ```php
 ConversionsApi::setUserData(
     (new UserData())->setEmail('john@example.com')
 );
 ```
-```blade
+```js
 fbq('init', 'your-configured-pixel-id', {"em": "john@example.com"});
 ```
 
@@ -132,10 +132,23 @@ Sadly the parameters between the Conversions API and Facebook Pixel are not iden
 An easy way of doing this is by extending the `FacebookAds\Object\ServerSide\Event` class and implementing the `Esign\ConversionsApi\Contracts\MapsToFacebookPixel` interface on it:
 ```php
 use Esign\ConversionsApi\Contracts\MapsToFacebookPixel;
+use Esign\ConversionsApi\Facades\ConversionsApi;
+use FacebookAds\Object\ServerSide\ActionSource;
 use FacebookAds\Object\ServerSide\Event;
 
 class PurchaseEvent extends Event implements MapsToFacebookPixel
 {
+    public static function create(): static
+    {
+        return (new static())
+            ->setActionSource(ActionSource::WEBSITE)
+            ->setEventName('Purchase')
+            ->setEventTime(time())
+            ->setEventSourceUrl(request()->url())
+            ->setEventId((string) Str::uuid())
+            ->setUserData(ConversionsApi::getUserData());
+    }
+
     public function getFacebookPixelEventType(): string
     {
         return 'track';
@@ -143,7 +156,7 @@ class PurchaseEvent extends Event implements MapsToFacebookPixel
 
     public function getFacebookPixelEventName(): string
     {
-        return 'Purchase';
+        return $this->getEventName();
     }
 
     public function getFacebookPixelCustomData(): array
@@ -168,8 +181,9 @@ You may now pass any class that implements the `MapsToFacebookPixel` interface t
 use FacebookAds\Object\ServerSide\CustomData;
 use Illuminate\Support\Str;
 
-$customData = (new CustomData())->setCurrency('EUR')->setValue(10);
-$event = (new PurchaseEvent())->setCustomData($customData)->setEventId((string) Str::uuid());
+$event = PurchaseEvent::create()->setCustomData(
+    (new CustomData())->setCurrency('EUR')->setValue(10)
+);
 ```
 
 ```blade
@@ -181,6 +195,13 @@ This will render the following script tag:
 <script>
     fbq('track', 'Purchase', {"currency": "EUR", "value": 10}, {"eventID": "ccf928e1-56fd-4376-bee3-dda0d7dbe136"});
 </script>
+```
+
+To retrieve a list of all events that implement the `MapsToFacebookPixel` interface you may call the `filterFacebookPixelEvents` method:
+```blade
+@foreach(ConversionsApi::getEvents()->filterFacebookPixelEvents() as $event)
+    <x-conversions-api-facebook-pixel-tracking-event :event="$event" />
+@endforeach
 ```
 
 In case you want more control over what's being rendered, you may always use the anonymous component:
@@ -220,6 +241,8 @@ After saving the variable you should be able to use it in your Facebook Pixel sc
 ## PageView Events
 This package ships with some helpers to track `PageView` events out of the box.
 These helpers will automatically send both Conversions API & Facebook Pixel events and provide event deduplication.
+> **Note**
+> Make sure to always include these view components after you've already looped over any other events currently defined on the ConversionsApi. Including these view components will clear any existing events.
 In case you're using the Facebook Pixel directly:
 ```blade
 <x-conversions-api-facebook-pixel-page-view />
@@ -228,6 +251,15 @@ Or by using Google Tag Manager. The data-layer variable to deduplicate events is
 ```blade
 <x-conversions-api-data-layer-page-view />
 ```
+
+## Troubleshooting
+### PageView events are not shown as deduplicated in the test events dashboard
+Event deduplication for PageView events should be fine out of the box, since the event name and event id parameters have been provided.
+However, when serving your application locally the ip address returned by Laravel's `request()->ip()` will be `127.0.0.1`.
+This is different from the ip address sent through Facebook Pixel, causing the Conversions API and Facebook Pixel events to not be deduplicated.
+This issue should solve itself once the application will be ran in production.
+
+
 
 ## Testing
 

@@ -67,8 +67,6 @@ class ConversionsApi
             $eventRequest->setTestEventCode($testCode);
         }
 
-        $this->clearEvents();
-
         return $eventRequest->execute();
     }
 }

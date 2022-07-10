@@ -30,6 +30,7 @@ class DataLayerPageViewTest extends TestCase
     {
         $this->mock(ConversionsApi::class, function (MockInterface $mock) {
             $mock->shouldReceive('getUserData')->once();
+            $mock->shouldReceive('clearEvents')->once()->andReturnSelf();
             $mock->shouldReceive('addEvent')->once()->andReturnSelf();
             $mock->shouldReceive('sendEvents')->once();
         });
