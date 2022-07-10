@@ -144,7 +144,7 @@ class PurchaseEvent extends Event implements MapsToFacebookPixel
             ->setActionSource(ActionSource::WEBSITE)
             ->setEventName('Purchase')
             ->setEventTime(time())
-            ->setEventSourceUrl(request()->url())
+            ->setEventSourceUrl(request()->fullUrl())
             ->setEventId((string) Str::uuid())
             ->setUserData(ConversionsApi::getUserData());
     }
@@ -243,6 +243,7 @@ This package ships with some helpers to track `PageView` events out of the box.
 These helpers will automatically send both Conversions API & Facebook Pixel events and provide event deduplication.
 > **Note**
 > Make sure to always include these view components after you've already looped over any other events currently defined on the ConversionsApi. Including these view components will clear any existing events.
+
 In case you're using the Facebook Pixel directly:
 ```blade
 <x-conversions-api-facebook-pixel-page-view />

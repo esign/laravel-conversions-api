@@ -18,7 +18,7 @@ class PageViewEvent extends Event implements MapsToFacebookPixel, MapsToDataLaye
             ->setEventName('PageView')
             ->setEventId((string) Str::uuid())
             ->setEventTime(time())
-            ->setEventSourceUrl(request()->url())
+            ->setEventSourceUrl(request()->fullUrl())
             ->setUserData(ConversionsApi::getUserData());
     }
 
