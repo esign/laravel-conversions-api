@@ -78,6 +78,34 @@ use Esign\ConversionsApi\Facades\ConversionsApi;
 ConversionsApi::sendEvents();
 ```
 
+#### Creating event classes
+To make things a bit cleaner you may extend Facebook's default event class:
+
+```php
+use Esign\ConversionsApi\Facades\ConversionsApi;
+use FacebookAds\Object\ServerSide\ActionSource;
+use FacebookAds\Object\ServerSide\Event;
+
+class PurchaseEvent extends Event
+{
+    public static function create(): static
+    {
+        return (new static())
+            ->setActionSource(ActionSource::WEBSITE)
+            ->setEventName('Purchase')
+            ->setEventTime(time())
+            ->setEventSourceUrl(request()->fullUrl())
+            ->setEventId((string) Str::uuid())
+            ->setUserData(ConversionsApi::getUserData());
+    }
+}
+```
+```php
+ConversionsApi::addEvent(
+    PurchaseEvent::create()
+);
+```
+
 ### User Data
 This package also comes with a way to define default user data for the user of the current request.
 You may do so by calling the `setUserData` method, this is typically done in your `AppServiceProvider`:
@@ -86,8 +114,7 @@ use Esign\ConversionsApi\Facades\ConversionsApi;
 use FacebookAds\Object\ServerSide\UserData;
 
 ConversionsApi::setUserData(
-    (new UserData())
-        ->setEmail(auth()->user()?->email)
+    (new UserData())->setEmail(auth()->user()?->email)
 );
 ```
 
@@ -134,7 +161,7 @@ ConversionsApi::setUserData(
 fbq('init', 'your-configured-pixel-id', {"em": "john@example.com"});
 ```
 
-Now that your Pixel is correctly initialized, it's time to send some events.    
+Now that your Pixel is correctly initialized, it's time to send some events.
 Sadly the parameters between the Conversions API and Facebook Pixel are not identical, so they must be mapped to the [correct format](https://developers.facebook.com/docs/meta-pixel/reference).
 An easy way of doing this is by extending the `FacebookAds\Object\ServerSide\Event` class and implementing the `Esign\ConversionsApi\Contracts\MapsToFacebookPixel` interface on it:
 ```php
