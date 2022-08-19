@@ -50,7 +50,7 @@ return [
 ## Conversions API
 
 ### Events
-To add events to the conversions API you may use the `addEvent` or `setEvents` methods.
+To add events to the conversions API you may use the `addEvent`, `addEvents` or `setEvents` methods.
 Retrieving or clearing events may be done using the `getEvents` and `clearEvents` methods:
 ```php
 use Esign\ConversionsApi\Facades\ConversionsApi;

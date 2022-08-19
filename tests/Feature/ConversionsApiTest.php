@@ -44,15 +44,33 @@ class ConversionsApiTest extends TestCase
     }
 
     /** @test */
+    public function it_can_add_multiple_events()
+    {
+        ConversionsApi::addEvent(
+            (new Event())->setEventName('PageView')->setEventId('abc')
+        );
+        ConversionsApi::addEvents([
+            (new Event())->setEventName('PageView')->setEventId('xyz'),
+        ]);
+
+        $this->assertCount(2, ConversionsApi::getEvents());
+        $this->assertEquals('PageView', ConversionsApi::getEvents()->first()->getEventName());
+        $this->assertEquals('abc', ConversionsApi::getEvents()->first()->getEventId());
+    }
+
+    /** @test */
     public function it_can_set_an_array_of_events()
     {
+        ConversionsApi::addEvent(
+            (new Event())->setEventName('PageView')->setEventId('abc')
+        );
         ConversionsApi::setEvents([
-            (new Event())->setEventName('PageView')->setEventId('abc'),
+            (new Event())->setEventName('PageView')->setEventId('xyz'),
         ]);
 
         $this->assertCount(1, ConversionsApi::getEvents());
         $this->assertEquals('PageView', ConversionsApi::getEvents()->first()->getEventName());
-        $this->assertEquals('abc', ConversionsApi::getEvents()->first()->getEventId());
+        $this->assertEquals('xyz', ConversionsApi::getEvents()->first()->getEventId());
     }
 
     /** @test */

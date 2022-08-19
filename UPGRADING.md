@@ -2,7 +2,7 @@
 This package now supports to send multiple events at once to the Conversions API, instead of sending them one by one. While the previous version was mainly focused on sending `PageView` events, v2 now supports all kinds of events.
 
 ### Method changes
-- The `setEvent` method has been replaced by `addEvents` and `setEvents` methods.
+- The `setEvent` method has been replaced by `addEvent`, `addEvents` and `setEvents` methods.
 - The `getEvent` method has been removed in favor of `getEvents`.
 - The `execute` method has been replaced by `sendEvents`.
 - The `setEventByName` method has been removed, it's recommended to create [dedicated event classes](README.MD#creating-event-classes) for this.

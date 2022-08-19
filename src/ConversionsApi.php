@@ -41,6 +41,13 @@ class ConversionsApi
         return $this;
     }
 
+    public function addEvents(iterable $events): self
+    {
+        $this->events = $this->events->merge($events);
+
+        return $this;
+    }
+
     public function setEvents(iterable $events): self
     {
         $this->events = new EventCollection($events);
