@@ -20,7 +20,7 @@ class DataLayerPageViewTest extends TestCase
         $component = $this->component(DataLayerPageView::class);
 
         $component->assertSee(
-            'window.dataLayer.push({"conversionsApiPageViewEventId":"b13ddf8f-df2d-4554-9ae6-a1a73861b0ad"});',
+            'window.dataLayer.push({"event":"conversionsApiPageView","conversionsApiPageViewEventId":"b13ddf8f-df2d-4554-9ae6-a1a73861b0ad"});',
             false
         );
     }

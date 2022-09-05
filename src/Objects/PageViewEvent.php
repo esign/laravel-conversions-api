@@ -44,6 +44,9 @@ class PageViewEvent extends Event implements MapsToFacebookPixel, MapsToDataLaye
 
     public function getDataLayerArguments(): array
     {
-        return ['conversionsApiPageViewEventId' => $this->getEventId()];
+        return [
+            'event' => 'conversionsApiPageView',
+            'conversionsApiPageViewEventId' => $this->getEventId()
+        ];
     }
 }
