@@ -111,17 +111,18 @@ This package also comes with a way to define default user data for the user of t
 You may do so by calling the `setUserData` method, this is typically done in your `AppServiceProvider`:
 ```php
 use Esign\ConversionsApi\Facades\ConversionsApi;
-use FacebookAds\Object\ServerSide\UserData;
+use Esign\ConversionsApi\Objects\DefaultUserData;
 
 ConversionsApi::setUserData(
-    (new UserData())->setEmail(auth()->user()?->email)
+    DefaultUserData::create()
+        ->setEmail(auth()->user()?->email)
 );
 ```
 
 You may now pass the user data along with your events:
 ```php
 use Esign\ConversionsApi\Facades\ConversionsApi;
-use FacebookAds\Object\ServerSide\UserData;
+use FacebookAds\Object\ServerSide\Event;
 
 ConversionsApi::addEvent(
     (new Event())->setUserData(ConversionsApi::getUserData())
@@ -280,11 +281,10 @@ ConversionsApi::setUserData(
 );
 ```
 ```js
-window.dataLayer.push({"conversionsApiEmail": "john@example.com"});
+window.dataLayer.push({"conversionsApiUserEmail": "john@example.com"});
 ```
 
 Now that your Pixel through GTM is correctly initialized, it's time to send some events.
-Sadly the parameters between the Conversions API and Facebook Pixel are not identical, so they must be mapped to the [correct format](https://developers.facebook.com/docs/meta-pixel/reference).
 An easy way of doing this is by extending the `FacebookAds\Object\ServerSide\Event` class and implementing the `Esign\ConversionsApi\Contracts\MapsToDataLayer` interface on it:
 ```php
 use Esign\ConversionsApi\Contracts\MapsToDataLayer;

@@ -17,3 +17,4 @@ In case you're using the Facebook Pixel directly, use `<x-conversions-api-facebo
 If you're sending them through Google Tag Manager, use `<x-conversions-api-data-layer-page-view />`.
 Note that the dataLayer variable name has been changed from `conversionsApiEventId` to `conversionsApiPageViewEventId`.
 - The `@conversionsApiFacebookPixelScript` directive has been replaced with `<x-conversions-api-facebook-pixel-script />`.
+- The `@conversionsApiDataLayer` has been removed. Support for dataLayer events is possible through `<x-conversions-api-data-layer-variable :event="$event" />` or `<x-conversions-api::data-layer-variable :arguments="[]" />`. See the [docs](README.md#google-tag-manager) for an example on this.
