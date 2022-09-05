@@ -17,17 +17,17 @@ class DataLayerUserDataVariable extends DataLayerVariable implements MapsToDataL
         $userData = ConversionsApi::getUserData();
 
         return array_filter([
-            'conversionsApiEmail' => $userData->getEmail(),
-            'conversionsApiFirstName' => $userData->getFirstName(),
-            'conversionsApiLastName' => $userData->getLastName(),
-            'conversionsApiPhone' => $userData->getPhone(),
-            'conversionsApiExternalId' => $userData->getExternalId(),
-            'conversionsApiGender' => $userData->getGender(),
-            'conversionsApiDateOfBirth' => $userData->getDateOfBirth(),
-            'conversionsApiCity' => $userData->getCity(),
-            'conversionsApiState' => $userData->getState(),
-            'conversionsApiZipCode' => $userData->getZipCode(),
-            'conversionsApiCountry' => $userData->getCountryCode(),
+            'conversionsApiUserEmail' => $userData->getEmail(),
+            'conversionsApiUserFirstName' => $userData->getFirstName(),
+            'conversionsApiUserLastName' => $userData->getLastName(),
+            'conversionsApiUserPhone' => $userData->getPhone(),
+            'conversionsApiUserExternalId' => $userData->getExternalId(),
+            'conversionsApiUserGender' => $userData->getGender(),
+            'conversionsApiUserDateOfBirth' => $userData->getDateOfBirth(),
+            'conversionsApiUserCity' => $userData->getCity(),
+            'conversionsApiUserState' => $userData->getState(),
+            'conversionsApiUserZipCode' => $userData->getZipCode(),
+            'conversionsApiUserCountry' => $userData->getCountryCode(),
         ]);
     }
 }
