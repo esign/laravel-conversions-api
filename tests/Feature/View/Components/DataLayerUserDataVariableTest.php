@@ -23,7 +23,7 @@ class DataLayerUserDataVariableTest extends TestCase
         $component = $this->component(DataLayerUserDataVariable::class);
 
         $component->assertSee(
-            'window.dataLayer.push({"conversionsApiEmail":"test@test.com"});',
+            'window.dataLayer.push({"conversionsApiUserEmail":"test@test.com"});',
             false
         );
     }
