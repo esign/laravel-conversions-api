@@ -108,16 +108,31 @@ ConversionsApi::addEvent(
 
 ### User Data
 This package also comes with a way to define default user data for the user of the current request.
-You may do so by calling the `setUserData` method, this is typically done in your `AppServiceProvider`:
+You may do so by calling the `setUserData` method.
+You can set the user data for every incoming request by creating a custom middleware like this one:
+
 ```php
+namespace App\Http\Middleware;
+
 use Esign\ConversionsApi\Facades\ConversionsApi;
 use Esign\ConversionsApi\Objects\DefaultUserData;
 
-ConversionsApi::setUserData(
-    DefaultUserData::create()
-        ->setEmail(auth()->user()?->email)
-);
+class InitializeFacebookUserData
+{
+    public function handle(Request $request, Closure $next): Response
+    {
+        ConversionsApi::setUserData(
+            DefaultUserData::create()
+                ->setEmail($request->user()?->email)
+        );
+
+        return $next($request);
+    }
+}
+
 ```
+
+You can now use it in `App\Http\Kernel` as a global middleware or a route middleware.
 
 You may now pass the user data along with your events:
 ```php
