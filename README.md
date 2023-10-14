@@ -177,7 +177,7 @@ ConversionsApi::setUserData(
 fbq('init', 'your-configured-pixel-id', {"em": "john@example.com"});
 ```
 #### Manage cookie consent and GDPR compliance
-The Facebook pixel offer a way to revoke and grant consent to make your app GDPR compliante.
+The Facebook pixel offer a way to revoke and grant consent to make your app GDPR compliant.
 
 You can pass the `revoke` attribute to the blade component to revoke consent.
 Usually the user consent is stored in another Cookie, so a standard workflow would look like that:
