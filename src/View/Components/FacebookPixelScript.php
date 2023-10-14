@@ -9,6 +9,11 @@ class FacebookPixelScript extends Component
 {
     protected ?string $pixelId;
     protected array $advancedMatchingData;
+    /**
+     * Manage GDPR consent by revoking consent before pixel init
+     * @see https://developers.facebook.com/docs/meta-pixel/implementation/gdpr/#cookieconsent
+     */
+    protected ?bool $revoke;
 
     /**
      * @param null|string $pixelId
@@ -17,10 +22,12 @@ class FacebookPixelScript extends Component
      */
     public function __construct(
         ?string $pixelId = null,
-        ?array $advancedMatchingData = null
+        ?array $advancedMatchingData = null,
+        ?bool $revoke = false,
     ) {
         $this->pixelId = $pixelId ?? config('conversions-api.pixel_id');
         $this->advancedMatchingData = $advancedMatchingData ?? $this->getAdvancedMatchingDataFromConversionsApiUserData();
+        $this->revoke = $revoke;
     }
 
     protected function getAdvancedMatchingDataFromConversionsApiUserData(): array
@@ -47,6 +54,7 @@ class FacebookPixelScript extends Component
         return view('conversions-api::components.facebook-pixel-script', [
             'pixelId' => $this->pixelId,
             'advancedMatchingData' => $this->advancedMatchingData,
+            'revoke' => $this->revoke,
         ]);
     }
 }

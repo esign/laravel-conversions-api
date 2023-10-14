@@ -176,6 +176,40 @@ ConversionsApi::setUserData(
 ```js
 fbq('init', 'your-configured-pixel-id', {"em": "john@example.com"});
 ```
+#### Manage cookie consent and GDPR compliance
+The Facebook pixel offer a way to revoke and grant consent to make your app GDPR compliante.
+
+You can pass the `revoke` attribute to the blade component to revoke consent.
+Usually the user consent is stored in another Cookie, so a standard workflow would look like that:
+```blade
+<x-conversions-api-facebook-pixel-script revoke="Cookie::get('consent_facebook', false)" />
+```
+
+It will render the following html:
+```html
+<script>
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+    document,'script','https://connect.facebook.net/en_US/fbevents.js');
+
+    fbq('consent', 'revoke');
+    fbq('init', 'your-configured-pixel-id', {});
+</script>
+```
+
+Once you explicitly get the consent of the user with your own method, you should call:
+```html
+<script>
+    fbq('consent', 'grant');
+</script>
+```
+The Facebook Pixel will start sending events as usual. 
+You can learn more about it here: https://developers.facebook.com/docs/meta-pixel/implementation/gdpr/#cookieconsent
+
+
+#### Sending Events with the pixel
 
 Now that your Pixel is correctly initialized, it's time to send some events.
 Sadly the parameters between the Conversions API and Facebook Pixel are not identical, so they must be mapped to the [correct format](https://developers.facebook.com/docs/meta-pixel/reference).
