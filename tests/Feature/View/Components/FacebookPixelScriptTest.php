@@ -21,6 +21,7 @@ class FacebookPixelScriptTest extends TestCase
         $component = $this->component(FacebookPixelScript::class);
 
         $component->assertSee("fbq('init', '414800860114807', {\"em\":\"test@test.com\"});", false);
+        $component->assertDontSee("fbq('consent', 'revoke');", true);
     }
 
     /** @test */
@@ -41,5 +42,27 @@ class FacebookPixelScriptTest extends TestCase
         ]);
 
         $component->assertSee("fbq('init', '744689831385767', {\"em\":\"test@test.com\"});", false);
+    }
+
+    /** @test */
+    public function it_can_render_the_view_with_revoking_consent()
+    {
+        $component = $this->component(FacebookPixelScript::class, [
+            'pixelId' => '744689831385767',
+            'revoke' => true,
+        ]);
+
+        $component->assertSee("fbq('consent', 'revoke');", false);
+    }
+
+    /** @test */
+    public function it_can_render_the_view_without_revoking_consent()
+    {
+        $component = $this->component(FacebookPixelScript::class, [
+            'pixelId' => '744689831385767',
+            'revoke' => false,
+        ]);
+
+        $component->assertDontSee("fbq('consent', 'revoke');", true);
     }
 }
