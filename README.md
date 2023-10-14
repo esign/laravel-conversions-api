@@ -182,7 +182,7 @@ The Facebook pixel offer a way to revoke and grant consent to make your app GDPR
 You can pass the `revoke` attribute to the blade component to revoke consent.
 Usually the user consent is stored in another Cookie, so a standard workflow would look like that:
 ```blade
-<x-conversions-api-facebook-pixel-script revoke="Cookie::get('consent_facebook', false)" />
+<x-conversions-api-facebook-pixel-script revoke="!Cookie::get('consent_facebook', false)" />
 ```
 
 It will render the following html:
