@@ -394,7 +394,29 @@ However, when serving your application locally the ip address returned by Larave
 This is different from the ip address sent through Facebook Pixel, causing the Conversions API and Facebook Pixel events to not be deduplicated.
 This issue should solve itself once the application will be ran in production.
 
+### Whitelisting Cookies in Laravel
+When using ``\App\Http\Middleware\EncryptCookies::class`` in ``\App\Http\Kernel::class``, ensure to whitelist _fbp and _fbc cookies to prevent null values in loading ``DefaultUserData::create()``. Update the $except property in the EncryptCookies middleware as shown below:
 
+```php
+<?php
+
+namespace App\Http\Middleware;
+
+use Illuminate\Cookie\Middleware\EncryptCookies as Middleware;
+
+class EncryptCookies extends Middleware
+{
+    /**
+     * The names of the cookies that should not be encrypted.
+     *
+     * @var array
+     */
+    protected $except = [
+        '_fbp',
+        '_fbc'
+    ];
+}
+```
 
 ## Testing
 
