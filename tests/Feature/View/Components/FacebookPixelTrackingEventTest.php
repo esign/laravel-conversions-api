@@ -69,4 +69,20 @@ class FacebookPixelTrackingEventTest extends TestCase
 
         $view->assertSee("fbq('track', 'Purchase', {}, {});", false);
     }
+
+    /** @test */
+    public function it_can_pass_component_attributes()
+    {
+        $view = $this->blade('
+            <x-conversions-api::facebook-pixel-tracking-event
+                eventType="track"
+                eventName="Purchase"
+                :customData="[]"
+                :eventData="[]"
+                class="my-class"
+            />
+        ');
+
+        $view->assertSee('<script class="my-class">', false);
+    }
 }

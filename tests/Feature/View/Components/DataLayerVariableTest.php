@@ -36,4 +36,17 @@ class DataLayerVariableTest extends TestCase
 
         $view->assertSee('window.dataLayer.push({"event":"contact"});', false);
     }
+
+    /** @test */
+    public function it_can_pass_component_attributes()
+    {
+        $view = $this->blade('
+            <x-conversions-api::data-layer-variable
+                :arguments="[]"
+                class="my-class"
+            />
+        ');
+
+        $view->assertSee('<script class="my-class">', false);
+    }
 }

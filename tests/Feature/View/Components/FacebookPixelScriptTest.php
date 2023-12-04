@@ -42,4 +42,17 @@ class FacebookPixelScriptTest extends TestCase
 
         $component->assertSee("fbq('init', '744689831385767', {\"em\":\"test@test.com\"});", false);
     }
+
+    /** @test */
+    public function it_can_pass_component_attributes()
+    {
+        $view = $this->blade('
+            <x-conversions-api::data-layer-variable
+                :arguments="[]"
+                class="my-class"
+            />
+        ');
+
+        $view->assertSee('<script class="my-class">', false);
+    }
 }
