@@ -31,6 +31,7 @@ class ConversionsApiServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->publishes([$this->configPath() => config_path('conversions-api.php')], 'config');
+            $this->publishes([$this->viewPath() => resource_path('views/vendor/conversions-api')], 'views');
         }
     }
 

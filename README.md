@@ -47,6 +47,11 @@ return [
 ];
 ```
 
+In case you want to customize the view components you may also publish the views:
+```bash
+php artisan vendor:publish --provider="Esign\ConversionsApi\ConversionsApiServiceProvider" --tag="views"
+```
+
 ## Conversions API
 
 ### Events
