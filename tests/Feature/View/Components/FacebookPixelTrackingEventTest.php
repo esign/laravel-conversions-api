@@ -2,6 +2,7 @@
 
 namespace Esign\ConversionsApi\Tests\Feature\View\Components;
 
+use PHPUnit\Framework\Attributes\Test;
 use Esign\ConversionsApi\Tests\Support\Events\PurchaseEvent;
 use Esign\ConversionsApi\Tests\TestCase;
 use Esign\ConversionsApi\View\Components\FacebookPixelTrackingEvent;
@@ -9,12 +10,12 @@ use FacebookAds\Object\ServerSide\Content;
 use FacebookAds\Object\ServerSide\CustomData;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
 
-class FacebookPixelTrackingEventTest extends TestCase
+final class FacebookPixelTrackingEventTest extends TestCase
 {
     use InteractsWithViews;
 
-    /** @test */
-    public function it_can_render_the_view()
+    #[Test]
+    public function it_can_render_the_view(): void
     {
         $event = (new PurchaseEvent());
         $component = $this->component(FacebookPixelTrackingEvent::class, [
@@ -25,8 +26,8 @@ class FacebookPixelTrackingEventTest extends TestCase
         $component->assertSee('Purchase');
     }
 
-    /** @test */
-    public function it_can_encode_custom_data_and_event_data_as_objects_when_they_are_empty_arrays()
+    #[Test]
+    public function it_can_encode_custom_data_and_event_data_as_objects_when_they_are_empty_arrays(): void
     {
         $event = (new PurchaseEvent());
         $component = $this->component(FacebookPixelTrackingEvent::class, [
@@ -39,8 +40,8 @@ class FacebookPixelTrackingEventTest extends TestCase
         );
     }
 
-    /** @test */
-    public function it_can_json_encode_custom_data_and_event_data()
+    #[Test]
+    public function it_can_json_encode_custom_data_and_event_data(): void
     {
         $contents = (new Content())->setProductId('10')->setQuantity(2);
         $customData = (new CustomData())->setValue(120)->setCurrency('GBP')->setContents([$contents]);
@@ -55,8 +56,8 @@ class FacebookPixelTrackingEventTest extends TestCase
         );
     }
 
-    /** @test */
-    public function it_can_render_anonymously()
+    #[Test]
+    public function it_can_render_anonymously(): void
     {
         $view = $this->blade('
             <x-conversions-api::facebook-pixel-tracking-event
@@ -70,8 +71,8 @@ class FacebookPixelTrackingEventTest extends TestCase
         $view->assertSee("fbq('track', 'Purchase', {}, {});", false);
     }
 
-    /** @test */
-    public function it_can_pass_component_attributes()
+    #[Test]
+    public function it_can_pass_component_attributes(): void
     {
         $view = $this->blade('
             <x-conversions-api::facebook-pixel-tracking-event

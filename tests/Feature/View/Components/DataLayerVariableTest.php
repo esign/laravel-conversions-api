@@ -2,17 +2,18 @@
 
 namespace Esign\ConversionsApi\Tests\Feature\View\Components;
 
+use PHPUnit\Framework\Attributes\Test;
 use Esign\ConversionsApi\Tests\Support\Events\ContactEvent;
 use Esign\ConversionsApi\Tests\TestCase;
 use Esign\ConversionsApi\View\Components\DataLayerVariable;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
 
-class DataLayerVariableTest extends TestCase
+final class DataLayerVariableTest extends TestCase
 {
     use InteractsWithViews;
 
-    /** @test */
-    public function it_can_render_the_view()
+    #[Test]
+    public function it_can_render_the_view(): void
     {
         $event = (new ContactEvent())->setEventId('9a97e3f0-3dbb-4d74-bf05-a42f330f843d');
         $component = $this->component(DataLayerVariable::class, [
@@ -25,8 +26,8 @@ class DataLayerVariableTest extends TestCase
         );
     }
 
-    /** @test */
-    public function it_can_render_anonymously()
+    #[Test]
+    public function it_can_render_anonymously(): void
     {
         $view = $this->blade('
             <x-conversions-api::data-layer-variable
@@ -37,8 +38,8 @@ class DataLayerVariableTest extends TestCase
         $view->assertSee('window.dataLayer.push({"event":"contact"});', false);
     }
 
-    /** @test */
-    public function it_can_pass_component_attributes()
+    #[Test]
+    public function it_can_pass_component_attributes(): void
     {
         $view = $this->blade('
             <x-conversions-api::data-layer-variable

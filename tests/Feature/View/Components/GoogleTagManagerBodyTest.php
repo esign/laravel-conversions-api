@@ -2,17 +2,18 @@
 
 namespace Esign\ConversionsApi\Tests\Feature\View\Components;
 
+use PHPUnit\Framework\Attributes\Test;
 use Esign\ConversionsApi\Tests\TestCase;
 use Esign\ConversionsApi\View\Components\GoogleTagManagerBody;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
 use Illuminate\Support\Facades\Config;
 
-class GoogleTagManagerBodyTest extends TestCase
+final class GoogleTagManagerBodyTest extends TestCase
 {
     use InteractsWithViews;
 
-    /** @test */
-    public function it_can_render_the_view()
+    #[Test]
+    public function it_can_render_the_view(): void
     {
         Config::set('conversions-api.gtm_id', 'GTM-123456');
         $component = $this->component(GoogleTagManagerBody::class);
@@ -20,8 +21,8 @@ class GoogleTagManagerBodyTest extends TestCase
         $component->assertSee('https://www.googletagmanager.com/ns.html?id=GTM-123456');
     }
 
-    /** @test */
-    public function it_can_render_the_view_using_custom_data()
+    #[Test]
+    public function it_can_render_the_view_using_custom_data(): void
     {
         Config::set('conversions-api.gtm_id', null);
         $component = $this->component(GoogleTagManagerBody::class, [

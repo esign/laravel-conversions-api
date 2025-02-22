@@ -2,16 +2,17 @@
 
 namespace Esign\ConversionsApi\Tests\Feature;
 
+use PHPUnit\Framework\Attributes\Test;
 use Esign\ConversionsApi\Collections\EventCollection;
 use Esign\ConversionsApi\Facades\ConversionsApi;
 use Esign\ConversionsApi\Tests\TestCase;
 use FacebookAds\Object\ServerSide\Event;
 use FacebookAds\Object\ServerSide\UserData;
 
-class ConversionsApiTest extends TestCase
+final class ConversionsApiTest extends TestCase
 {
-    /** @test */
-    public function it_can_set_user_data_by_default()
+    #[Test]
+    public function it_can_set_user_data_by_default(): void
     {
         request()->headers->set('USER_AGENT', 'Esign Agent');
         request()->server->set('REMOTE_ADDR', '0.0.0.0');
@@ -20,8 +21,8 @@ class ConversionsApiTest extends TestCase
         $this->assertEquals('Esign Agent', ConversionsApi::getUserData()->getClientUserAgent());
     }
 
-    /** @test */
-    public function it_can_set_user_data()
+    #[Test]
+    public function it_can_set_user_data(): void
     {
         ConversionsApi::setUserData(
             (new UserData())->setFirstName('John')->setLastName('Doe')
@@ -31,8 +32,8 @@ class ConversionsApiTest extends TestCase
         $this->assertEquals('Doe', ConversionsApi::getUserData()->getLastName());
     }
 
-    /** @test */
-    public function it_can_add_an_event()
+    #[Test]
+    public function it_can_add_an_event(): void
     {
         ConversionsApi::addEvent(
             (new Event())->setEventName('PageView')->setEventId('abc')
@@ -43,8 +44,8 @@ class ConversionsApiTest extends TestCase
         $this->assertEquals('abc', ConversionsApi::getEvents()->first()->getEventId());
     }
 
-    /** @test */
-    public function it_can_add_multiple_events()
+    #[Test]
+    public function it_can_add_multiple_events(): void
     {
         ConversionsApi::addEvent(
             (new Event())->setEventName('PageView')->setEventId('abc')
@@ -58,8 +59,8 @@ class ConversionsApiTest extends TestCase
         $this->assertEquals('abc', ConversionsApi::getEvents()->first()->getEventId());
     }
 
-    /** @test */
-    public function it_can_set_an_array_of_events()
+    #[Test]
+    public function it_can_set_an_array_of_events(): void
     {
         ConversionsApi::addEvent(
             (new Event())->setEventName('PageView')->setEventId('abc')
@@ -73,8 +74,8 @@ class ConversionsApiTest extends TestCase
         $this->assertEquals('xyz', ConversionsApi::getEvents()->first()->getEventId());
     }
 
-    /** @test */
-    public function it_can_clear_events()
+    #[Test]
+    public function it_can_clear_events(): void
     {
         ConversionsApi::setEvents([
             (new Event())->setEventName('PageView')->setEventId('abc'),
@@ -85,8 +86,8 @@ class ConversionsApiTest extends TestCase
         $this->assertCount(0, ConversionsApi::getEvents());
     }
 
-    /** @test */
-    public function it_can_get_events()
+    #[Test]
+    public function it_can_get_events(): void
     {
         ConversionsApi::setEvents([
             (new Event())->setEventName('PageView')->setEventId('abc'),

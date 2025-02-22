@@ -2,16 +2,17 @@
 
 namespace Esign\ConversionsApi\Tests\Unit\Objects;
 
+use PHPUnit\Framework\Attributes\Test;
 use Esign\ConversionsApi\Facades\ConversionsApi;
 use Esign\ConversionsApi\Objects\PageViewEvent;
 use Esign\ConversionsApi\Tests\TestCase;
 use FacebookAds\Object\ServerSide\ActionSource;
 use Illuminate\Support\Str;
 
-class PageViewEventTest extends TestCase
+final class PageViewEventTest extends TestCase
 {
-    /** @test */
-    public function it_can_statically_create_itself()
+    #[Test]
+    public function it_can_statically_create_itself(): void
     {
         $this->get('posts?title=abc');
         Str::createUuidsUsing(fn () => 'b13ddf8f-df2d-4554-9ae6-a1a73861b0ad');
