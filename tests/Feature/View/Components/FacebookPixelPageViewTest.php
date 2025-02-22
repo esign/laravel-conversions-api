@@ -10,7 +10,7 @@ use Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
 use Illuminate\Support\Str;
 use Mockery\MockInterface;
 
-class FacebookPixelPageViewTest extends TestCase
+final class FacebookPixelPageViewTest extends TestCase
 {
     use InteractsWithViews;
 

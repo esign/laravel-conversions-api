@@ -10,7 +10,7 @@ use FacebookAds\Object\ServerSide\Content;
 use FacebookAds\Object\ServerSide\CustomData;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
 
-class FacebookPixelTrackingEventTest extends TestCase
+final class FacebookPixelTrackingEventTest extends TestCase
 {
     use InteractsWithViews;
 

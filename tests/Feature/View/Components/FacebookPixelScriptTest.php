@@ -10,7 +10,7 @@ use FacebookAds\Object\ServerSide\UserData;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
 use Illuminate\Support\Facades\Config;
 
-class FacebookPixelScriptTest extends TestCase
+final class FacebookPixelScriptTest extends TestCase
 {
     use InteractsWithViews;
 

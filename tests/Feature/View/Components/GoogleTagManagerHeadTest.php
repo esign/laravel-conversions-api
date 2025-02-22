@@ -8,7 +8,7 @@ use Esign\ConversionsApi\View\Components\GoogleTagManagerHead;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
 use Illuminate\Support\Facades\Config;
 
-class GoogleTagManagerHeadTest extends TestCase
+final class GoogleTagManagerHeadTest extends TestCase
 {
     use InteractsWithViews;
 

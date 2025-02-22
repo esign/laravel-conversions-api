@@ -8,7 +8,7 @@ use Esign\ConversionsApi\Tests\TestCase;
 use Esign\ConversionsApi\View\Components\DataLayerVariable;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
 
-class DataLayerVariableTest extends TestCase
+final class DataLayerVariableTest extends TestCase
 {
     use InteractsWithViews;
 

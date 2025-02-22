@@ -9,7 +9,7 @@ use Esign\ConversionsApi\Tests\TestCase;
 use FacebookAds\Object\ServerSide\ActionSource;
 use Illuminate\Support\Str;
 
-class PageViewEventTest extends TestCase
+final class PageViewEventTest extends TestCase
 {
     #[Test]
     public function it_can_statically_create_itself(): void

@@ -10,7 +10,7 @@ use Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
 use Illuminate\Support\Str;
 use Mockery\MockInterface;
 
-class DataLayerPageViewTest extends TestCase
+final class DataLayerPageViewTest extends TestCase
 {
     use InteractsWithViews;
 

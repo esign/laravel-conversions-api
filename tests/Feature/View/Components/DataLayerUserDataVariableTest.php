@@ -11,7 +11,7 @@ use Esign\ConversionsApi\View\Components\DataLayerUserDataVariable;
 use Esign\ConversionsApi\View\Components\DataLayerVariable;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
 
-class DataLayerUserDataVariableTest extends TestCase
+final class DataLayerUserDataVariableTest extends TestCase
 {
     use InteractsWithViews;
 

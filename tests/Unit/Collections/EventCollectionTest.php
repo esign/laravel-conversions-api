@@ -8,7 +8,7 @@ use Esign\ConversionsApi\Tests\Support\Events\ContactEvent;
 use Esign\ConversionsApi\Tests\Support\Events\PurchaseEvent;
 use Esign\ConversionsApi\Tests\TestCase;
 
-class EventCollectionTest extends TestCase
+final class EventCollectionTest extends TestCase
 {
     #[Test]
     public function it_can_filter_facebook_pixel_events(): void

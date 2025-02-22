@@ -9,7 +9,7 @@ use Esign\ConversionsApi\Tests\TestCase;
 use FacebookAds\Object\ServerSide\Event;
 use FacebookAds\Object\ServerSide\UserData;
 
-class ConversionsApiTest extends TestCase
+final class ConversionsApiTest extends TestCase
 {
     #[Test]
     public function it_can_set_user_data_by_default(): void
