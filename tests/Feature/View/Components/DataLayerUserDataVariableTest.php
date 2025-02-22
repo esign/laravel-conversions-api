@@ -2,6 +2,7 @@
 
 namespace Esign\ConversionsApi\Tests\Feature\View\Components;
 
+use PHPUnit\Framework\Attributes\Test;
 use Esign\ConversionsApi\Facades\ConversionsApi;
 use Esign\ConversionsApi\Objects\DefaultUserData;
 use Esign\ConversionsApi\Tests\Support\Events\ContactEvent;
@@ -14,7 +15,7 @@ class DataLayerUserDataVariableTest extends TestCase
 {
     use InteractsWithViews;
 
-    /** @test */
+    #[Test]
     public function it_can_render_the_view()
     {
         ConversionsApi::setUserData(

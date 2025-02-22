@@ -2,6 +2,7 @@
 
 namespace Esign\ConversionsApi\Tests\Unit\Objects;
 
+use PHPUnit\Framework\Attributes\Test;
 use Esign\ConversionsApi\Facades\ConversionsApi;
 use Esign\ConversionsApi\Objects\PageViewEvent;
 use Esign\ConversionsApi\Tests\TestCase;
@@ -10,7 +11,7 @@ use Illuminate\Support\Str;
 
 class PageViewEventTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_can_statically_create_itself()
     {
         $this->get('posts?title=abc');

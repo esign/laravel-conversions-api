@@ -2,6 +2,7 @@
 
 namespace Esign\ConversionsApi\Tests\Feature;
 
+use PHPUnit\Framework\Attributes\Test;
 use Esign\ConversionsApi\Collections\EventCollection;
 use Esign\ConversionsApi\Facades\ConversionsApi;
 use Esign\ConversionsApi\Tests\TestCase;
@@ -10,7 +11,7 @@ use FacebookAds\Object\ServerSide\UserData;
 
 class ConversionsApiTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_can_set_user_data_by_default()
     {
         request()->headers->set('USER_AGENT', 'Esign Agent');
@@ -20,7 +21,7 @@ class ConversionsApiTest extends TestCase
         $this->assertEquals('Esign Agent', ConversionsApi::getUserData()->getClientUserAgent());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_set_user_data()
     {
         ConversionsApi::setUserData(
@@ -31,7 +32,7 @@ class ConversionsApiTest extends TestCase
         $this->assertEquals('Doe', ConversionsApi::getUserData()->getLastName());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_add_an_event()
     {
         ConversionsApi::addEvent(
@@ -43,7 +44,7 @@ class ConversionsApiTest extends TestCase
         $this->assertEquals('abc', ConversionsApi::getEvents()->first()->getEventId());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_add_multiple_events()
     {
         ConversionsApi::addEvent(
@@ -58,7 +59,7 @@ class ConversionsApiTest extends TestCase
         $this->assertEquals('abc', ConversionsApi::getEvents()->first()->getEventId());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_set_an_array_of_events()
     {
         ConversionsApi::addEvent(
@@ -73,7 +74,7 @@ class ConversionsApiTest extends TestCase
         $this->assertEquals('xyz', ConversionsApi::getEvents()->first()->getEventId());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_clear_events()
     {
         ConversionsApi::setEvents([
@@ -85,7 +86,7 @@ class ConversionsApiTest extends TestCase
         $this->assertCount(0, ConversionsApi::getEvents());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_get_events()
     {
         ConversionsApi::setEvents([

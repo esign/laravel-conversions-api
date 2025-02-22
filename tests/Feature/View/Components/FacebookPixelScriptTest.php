@@ -2,6 +2,7 @@
 
 namespace Esign\ConversionsApi\Tests\Feature\View\Components;
 
+use PHPUnit\Framework\Attributes\Test;
 use Esign\ConversionsApi\Facades\ConversionsApi;
 use Esign\ConversionsApi\Tests\TestCase;
 use Esign\ConversionsApi\View\Components\FacebookPixelScript;
@@ -13,7 +14,7 @@ class FacebookPixelScriptTest extends TestCase
 {
     use InteractsWithViews;
 
-    /** @test */
+    #[Test]
     public function it_can_render_the_view_using_default_data()
     {
         Config::set('conversions-api.pixel_id', '414800860114807');
@@ -23,7 +24,7 @@ class FacebookPixelScriptTest extends TestCase
         $component->assertSee("fbq('init', '414800860114807', {\"em\":\"test@test.com\"});", false);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_render_an_empty_object_for_advanced_matching_data()
     {
         Config::set('conversions-api.pixel_id', '414800860114807');
@@ -32,7 +33,7 @@ class FacebookPixelScriptTest extends TestCase
         $component->assertSee("fbq('init', '414800860114807', {});", false);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_render_the_view_passing_custom_data()
     {
         $component = $this->component(FacebookPixelScript::class, [
@@ -43,7 +44,7 @@ class FacebookPixelScriptTest extends TestCase
         $component->assertSee("fbq('init', '744689831385767', {\"em\":\"test@test.com\"});", false);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_pass_component_attributes()
     {
         $view = $this->blade('

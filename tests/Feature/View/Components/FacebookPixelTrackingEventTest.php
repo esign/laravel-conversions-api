@@ -2,6 +2,7 @@
 
 namespace Esign\ConversionsApi\Tests\Feature\View\Components;
 
+use PHPUnit\Framework\Attributes\Test;
 use Esign\ConversionsApi\Tests\Support\Events\PurchaseEvent;
 use Esign\ConversionsApi\Tests\TestCase;
 use Esign\ConversionsApi\View\Components\FacebookPixelTrackingEvent;
@@ -13,7 +14,7 @@ class FacebookPixelTrackingEventTest extends TestCase
 {
     use InteractsWithViews;
 
-    /** @test */
+    #[Test]
     public function it_can_render_the_view()
     {
         $event = (new PurchaseEvent());
@@ -25,7 +26,7 @@ class FacebookPixelTrackingEventTest extends TestCase
         $component->assertSee('Purchase');
     }
 
-    /** @test */
+    #[Test]
     public function it_can_encode_custom_data_and_event_data_as_objects_when_they_are_empty_arrays()
     {
         $event = (new PurchaseEvent());
@@ -39,7 +40,7 @@ class FacebookPixelTrackingEventTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_json_encode_custom_data_and_event_data()
     {
         $contents = (new Content())->setProductId('10')->setQuantity(2);
@@ -55,7 +56,7 @@ class FacebookPixelTrackingEventTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_can_render_anonymously()
     {
         $view = $this->blade('
@@ -70,7 +71,7 @@ class FacebookPixelTrackingEventTest extends TestCase
         $view->assertSee("fbq('track', 'Purchase', {}, {});", false);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_pass_component_attributes()
     {
         $view = $this->blade('

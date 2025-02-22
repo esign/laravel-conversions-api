@@ -2,6 +2,7 @@
 
 namespace Esign\ConversionsApi\Tests\Feature\View\Components;
 
+use PHPUnit\Framework\Attributes\Test;
 use Esign\ConversionsApi\Tests\TestCase;
 use Esign\ConversionsApi\View\Components\GoogleTagManagerHead;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithViews;
@@ -11,7 +12,7 @@ class GoogleTagManagerHeadTest extends TestCase
 {
     use InteractsWithViews;
 
-    /** @test */
+    #[Test]
     public function it_can_render_the_view()
     {
         Config::set('conversions-api.gtm_id', 'GTM-123456');
@@ -20,7 +21,7 @@ class GoogleTagManagerHeadTest extends TestCase
         $component->assertSee("(window,document,'script','dataLayer','GTM-123456')", false);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_render_the_view_using_custom_data()
     {
         Config::set('conversions-api.gtm_id', null);

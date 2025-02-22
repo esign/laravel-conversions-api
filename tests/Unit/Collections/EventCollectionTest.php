@@ -2,6 +2,7 @@
 
 namespace Esign\ConversionsApi\Tests\Unit\Collections;
 
+use PHPUnit\Framework\Attributes\Test;
 use Esign\ConversionsApi\Collections\EventCollection;
 use Esign\ConversionsApi\Tests\Support\Events\ContactEvent;
 use Esign\ConversionsApi\Tests\Support\Events\PurchaseEvent;
@@ -9,7 +10,7 @@ use Esign\ConversionsApi\Tests\TestCase;
 
 class EventCollectionTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_can_filter_facebook_pixel_events()
     {
         $eventCollection = new EventCollection([
@@ -23,7 +24,7 @@ class EventCollectionTest extends TestCase
         $this->assertFalse($facebookPixelEvents->contains($contactEvent));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_filter_data_layer_events()
     {
         $eventCollection = new EventCollection([
