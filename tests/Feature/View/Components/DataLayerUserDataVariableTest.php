@@ -16,7 +16,7 @@ class DataLayerUserDataVariableTest extends TestCase
     use InteractsWithViews;
 
     #[Test]
-    public function it_can_render_the_view()
+    public function it_can_render_the_view(): void
     {
         ConversionsApi::setUserData(
             DefaultUserData::create()->setEmail('test@test.com')

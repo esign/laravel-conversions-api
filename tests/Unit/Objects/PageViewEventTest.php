@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
 class PageViewEventTest extends TestCase
 {
     #[Test]
-    public function it_can_statically_create_itself()
+    public function it_can_statically_create_itself(): void
     {
         $this->get('posts?title=abc');
         Str::createUuidsUsing(fn () => 'b13ddf8f-df2d-4554-9ae6-a1a73861b0ad');

@@ -13,7 +13,7 @@ class GoogleTagManagerBodyTest extends TestCase
     use InteractsWithViews;
 
     #[Test]
-    public function it_can_render_the_view()
+    public function it_can_render_the_view(): void
     {
         Config::set('conversions-api.gtm_id', 'GTM-123456');
         $component = $this->component(GoogleTagManagerBody::class);
@@ -22,7 +22,7 @@ class GoogleTagManagerBodyTest extends TestCase
     }
 
     #[Test]
-    public function it_can_render_the_view_using_custom_data()
+    public function it_can_render_the_view_using_custom_data(): void
     {
         Config::set('conversions-api.gtm_id', null);
         $component = $this->component(GoogleTagManagerBody::class, [

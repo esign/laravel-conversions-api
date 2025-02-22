@@ -11,7 +11,7 @@ use Esign\ConversionsApi\Tests\TestCase;
 class EventCollectionTest extends TestCase
 {
     #[Test]
-    public function it_can_filter_facebook_pixel_events()
+    public function it_can_filter_facebook_pixel_events(): void
     {
         $eventCollection = new EventCollection([
             $purchaseEvent = new PurchaseEvent(),
@@ -25,7 +25,7 @@ class EventCollectionTest extends TestCase
     }
 
     #[Test]
-    public function it_can_filter_data_layer_events()
+    public function it_can_filter_data_layer_events(): void
     {
         $eventCollection = new EventCollection([
             $purchaseEvent = new PurchaseEvent(),

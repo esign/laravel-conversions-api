@@ -15,7 +15,7 @@ class FacebookPixelTrackingEventTest extends TestCase
     use InteractsWithViews;
 
     #[Test]
-    public function it_can_render_the_view()
+    public function it_can_render_the_view(): void
     {
         $event = (new PurchaseEvent());
         $component = $this->component(FacebookPixelTrackingEvent::class, [
@@ -27,7 +27,7 @@ class FacebookPixelTrackingEventTest extends TestCase
     }
 
     #[Test]
-    public function it_can_encode_custom_data_and_event_data_as_objects_when_they_are_empty_arrays()
+    public function it_can_encode_custom_data_and_event_data_as_objects_when_they_are_empty_arrays(): void
     {
         $event = (new PurchaseEvent());
         $component = $this->component(FacebookPixelTrackingEvent::class, [
@@ -41,7 +41,7 @@ class FacebookPixelTrackingEventTest extends TestCase
     }
 
     #[Test]
-    public function it_can_json_encode_custom_data_and_event_data()
+    public function it_can_json_encode_custom_data_and_event_data(): void
     {
         $contents = (new Content())->setProductId('10')->setQuantity(2);
         $customData = (new CustomData())->setValue(120)->setCurrency('GBP')->setContents([$contents]);
@@ -57,7 +57,7 @@ class FacebookPixelTrackingEventTest extends TestCase
     }
 
     #[Test]
-    public function it_can_render_anonymously()
+    public function it_can_render_anonymously(): void
     {
         $view = $this->blade('
             <x-conversions-api::facebook-pixel-tracking-event
@@ -72,7 +72,7 @@ class FacebookPixelTrackingEventTest extends TestCase
     }
 
     #[Test]
-    public function it_can_pass_component_attributes()
+    public function it_can_pass_component_attributes(): void
     {
         $view = $this->blade('
             <x-conversions-api::facebook-pixel-tracking-event

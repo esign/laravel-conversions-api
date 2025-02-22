@@ -15,7 +15,7 @@ class DataLayerPageViewTest extends TestCase
     use InteractsWithViews;
 
     #[Test]
-    public function it_can_render_the_view()
+    public function it_can_render_the_view(): void
     {
         Str::createUuidsUsing(fn () => 'b13ddf8f-df2d-4554-9ae6-a1a73861b0ad');
         $component = $this->component(DataLayerPageView::class);
@@ -27,7 +27,7 @@ class DataLayerPageViewTest extends TestCase
     }
 
     #[Test]
-    public function it_can_execute_a_page_view_event()
+    public function it_can_execute_a_page_view_event(): void
     {
         $this->mock(ConversionsApi::class, function (MockInterface $mock) {
             $mock->shouldReceive('getUserData')->once();

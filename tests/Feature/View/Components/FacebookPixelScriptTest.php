@@ -15,7 +15,7 @@ class FacebookPixelScriptTest extends TestCase
     use InteractsWithViews;
 
     #[Test]
-    public function it_can_render_the_view_using_default_data()
+    public function it_can_render_the_view_using_default_data(): void
     {
         Config::set('conversions-api.pixel_id', '414800860114807');
         ConversionsApi::setUserData((new UserData())->setEmail('test@test.com'));
@@ -25,7 +25,7 @@ class FacebookPixelScriptTest extends TestCase
     }
 
     #[Test]
-    public function it_can_render_an_empty_object_for_advanced_matching_data()
+    public function it_can_render_an_empty_object_for_advanced_matching_data(): void
     {
         Config::set('conversions-api.pixel_id', '414800860114807');
         $component = $this->component(FacebookPixelScript::class);
@@ -34,7 +34,7 @@ class FacebookPixelScriptTest extends TestCase
     }
 
     #[Test]
-    public function it_can_render_the_view_passing_custom_data()
+    public function it_can_render_the_view_passing_custom_data(): void
     {
         $component = $this->component(FacebookPixelScript::class, [
             'pixelId' => '744689831385767',
@@ -45,7 +45,7 @@ class FacebookPixelScriptTest extends TestCase
     }
 
     #[Test]
-    public function it_can_pass_component_attributes()
+    public function it_can_pass_component_attributes(): void
     {
         $view = $this->blade('
             <x-conversions-api::data-layer-variable

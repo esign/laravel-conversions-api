@@ -13,7 +13,7 @@ class DataLayerVariableTest extends TestCase
     use InteractsWithViews;
 
     #[Test]
-    public function it_can_render_the_view()
+    public function it_can_render_the_view(): void
     {
         $event = (new ContactEvent())->setEventId('9a97e3f0-3dbb-4d74-bf05-a42f330f843d');
         $component = $this->component(DataLayerVariable::class, [
@@ -27,7 +27,7 @@ class DataLayerVariableTest extends TestCase
     }
 
     #[Test]
-    public function it_can_render_anonymously()
+    public function it_can_render_anonymously(): void
     {
         $view = $this->blade('
             <x-conversions-api::data-layer-variable
@@ -39,7 +39,7 @@ class DataLayerVariableTest extends TestCase
     }
 
     #[Test]
-    public function it_can_pass_component_attributes()
+    public function it_can_pass_component_attributes(): void
     {
         $view = $this->blade('
             <x-conversions-api::data-layer-variable

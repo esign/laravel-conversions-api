@@ -12,7 +12,7 @@ use FacebookAds\Object\ServerSide\UserData;
 class ConversionsApiTest extends TestCase
 {
     #[Test]
-    public function it_can_set_user_data_by_default()
+    public function it_can_set_user_data_by_default(): void
     {
         request()->headers->set('USER_AGENT', 'Esign Agent');
         request()->server->set('REMOTE_ADDR', '0.0.0.0');
@@ -22,7 +22,7 @@ class ConversionsApiTest extends TestCase
     }
 
     #[Test]
-    public function it_can_set_user_data()
+    public function it_can_set_user_data(): void
     {
         ConversionsApi::setUserData(
             (new UserData())->setFirstName('John')->setLastName('Doe')
@@ -33,7 +33,7 @@ class ConversionsApiTest extends TestCase
     }
 
     #[Test]
-    public function it_can_add_an_event()
+    public function it_can_add_an_event(): void
     {
         ConversionsApi::addEvent(
             (new Event())->setEventName('PageView')->setEventId('abc')
@@ -45,7 +45,7 @@ class ConversionsApiTest extends TestCase
     }
 
     #[Test]
-    public function it_can_add_multiple_events()
+    public function it_can_add_multiple_events(): void
     {
         ConversionsApi::addEvent(
             (new Event())->setEventName('PageView')->setEventId('abc')
@@ -60,7 +60,7 @@ class ConversionsApiTest extends TestCase
     }
 
     #[Test]
-    public function it_can_set_an_array_of_events()
+    public function it_can_set_an_array_of_events(): void
     {
         ConversionsApi::addEvent(
             (new Event())->setEventName('PageView')->setEventId('abc')
@@ -75,7 +75,7 @@ class ConversionsApiTest extends TestCase
     }
 
     #[Test]
-    public function it_can_clear_events()
+    public function it_can_clear_events(): void
     {
         ConversionsApi::setEvents([
             (new Event())->setEventName('PageView')->setEventId('abc'),
@@ -87,7 +87,7 @@ class ConversionsApiTest extends TestCase
     }
 
     #[Test]
-    public function it_can_get_events()
+    public function it_can_get_events(): void
     {
         ConversionsApi::setEvents([
             (new Event())->setEventName('PageView')->setEventId('abc'),
