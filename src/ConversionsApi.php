@@ -68,7 +68,7 @@ class ConversionsApi
     public function sendEvents(): PromiseInterface
     {
         $eventRequest = (new EventRequestAsync(config('conversions-api.pixel_id')))
-            ->setEvents($this->events);
+            ->setEvents($this->events->all());
 
         if ($testCode = config('conversions-api.test_code')) {
             $eventRequest->setTestEventCode($testCode);
